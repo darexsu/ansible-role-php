@@ -2,7 +2,7 @@
 galaxy_info:
   author: "darexsu"
   role_name: "php"
-  description: easy setup php
+  description: easy setup php 7.x, php 8.x. from sury/ppa:ondrej/remi
   company: ""
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
