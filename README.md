@@ -6,10 +6,11 @@ Optional:
   - configuration ( ./pool.d/*.conf ) 
   - configuration ( ./php.ini )
 
+Molecule testing:
 
-|    Debian     |    Ubuntu     |    CentOS     |   CentOS     |   CentOS     |
-| ------------- | ------------- | ------------- | ------------ | ------------ |
-|   10, 11      | Content Cell  | Content Cell  |   CentOS     |   CentOS     |
+|    Debian     |    Ubuntu     |    CentOS     |  Rocky Linux |
+| ------------- | ------------- | ------------- | ------------ |
+|   10, 11      | 18.04, 20.04  |     7, 8      |      8       |
 
 
 Installation:
@@ -29,10 +30,4 @@ ansible-galaxy install darexsu.php
       vars:
         php_install: true
         php_settings: true
-```
-
-3) Testing
-
-```
-php -v
 ```

@@ -22,7 +22,7 @@ php_install__remi_repo_gpg_key_url: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2
 # settings
 php_settings: false
 php_settings__version: "{{ php_install__version }}"
-# settings -> php.ini 
+# settings -> php.ini
 php_settings__php_ini: true
 php_settings__php_ini_expose_php: "On"
 php_settings__php_ini_memory_limit: "256M"
