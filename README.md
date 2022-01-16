@@ -19,7 +19,7 @@ Installation:
 ```
 ansible-galaxy install darexsu.php
 ```
-2.1) Example playbook for for php 8.0, TCP/IP socket
+2.1) Example playbook for php 8.0, TCP/IP socket
 
 ```yaml
 ---
