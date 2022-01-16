@@ -6,13 +6,13 @@
 
 - name: add php repository gpg key
   ansible.builtin.apt_key:
-    url: "{{ php_install__repo_gpg_key }}"
+    url: "{{ php_install__sury_repo_gpg_key }}"
     state: present
   when: php_install__repo
 
 - name: add php repository
   ansible.builtin.apt_repository:
-    repo: "{{ php_install__repo_path }}"
+    repo: "{{ php_install__sury_repo_path }}"
     state: present
     update_cache: yes
   when: php_install__repo
