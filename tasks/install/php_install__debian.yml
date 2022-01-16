@@ -46,7 +46,13 @@
     state: stopped
   when: ansible_facts.services is search("apache2.service")
 
-- name: install php{{ php_install__version }} packages.
+- name: install php{{ php_install__version }}
+  ansible.builtin.apt:
+    name: "php{{ php_install__version }}"
+    state: present
+  ignore_errors: yes  
+
+- name: install php{{ php_install__version }} packages
   ansible.builtin.apt:
     name: "php{{ php_install__version }}-{{ item }}"
     state: present
