@@ -52,5 +52,5 @@ scenario:
     # - verify
     # - cleanup
     - destroy
-lint: |
-  yamllint .
+#lint: |
+#  yamllint .
