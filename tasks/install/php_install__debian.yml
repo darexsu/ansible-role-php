@@ -3,19 +3,20 @@
   ansible.builtin.apt:
     name: "{{ php_install__dependencies_debian }}"
     state: present
+    update_cache: true
 
 - name: add php repository gpg key
   ansible.builtin.apt_key:
     url: "{{ php_install__sury_repo_gpg_key }}"
     state: present
-  when: php_install__repo
+  when: php_install__sury_repo
 
 - name: add php repository
   ansible.builtin.apt_repository:
     repo: "{{ php_install__sury_repo_path }}"
     state: present
     update_cache: yes
-  when: php_install__repo
+  when: php_install__sury_repo
 
 - name: service facts
   ansible.builtin.service_facts:
