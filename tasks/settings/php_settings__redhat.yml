@@ -1,0 +1,49 @@
+---
+- name: update php.ini config from template
+  template:
+    src: php_ini.j2
+    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php.ini"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart php-fpm redhat
+  when: php_settings__php_ini
+
+- name: ensure web-server user exsist
+  block:
+    - name: ensure web-server group exsist
+      ansible.builtin.group:
+        name: "{{ php_settings__pool_webserver_group }}"
+
+    - name: ensure web-server user exsist
+      ansible.builtin.user:
+        name: "{{ php_settings__pool_webserver_user }}"
+        group: "{{ php_settings__pool_webserver_group }}"
+
+- name: ensure directory and user exsist for unix socket
+  block:
+    - name: ensure web-server group exsist
+      ansible.builtin.group:
+        name: "{{ php_settings__pool_unix_group }}"
+
+    - name: ensure web-server user exsist
+      ansible.builtin.user:
+        name: "{{ php_settings__pool_unix_user }}"
+        group: "{{ php_settings__pool_unix_group }}"
+
+    - name: create a directory for unix socket
+      ansible.builtin.file:
+        path: /run/php/
+        state: directory
+        mode: 0755
+  when: php_settings__pool_unix_socket
+
+- name: add webserver config php-fpm-pool
+  template:
+    src: php_pool.j2
+    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d/{{ php_settings__pool_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart php-fpm redhat
+  when: php_settings__pool

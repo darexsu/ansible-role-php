@@ -1,0 +1,8 @@
+---
+- name: include php install
+  include_tasks: ./tasks/install/php_install__{{ ansible_os_family | lower }}.yml
+  when: php_install
+
+- name: include php settings
+  include_tasks: ./tasks/settings/php_settings__{{ ansible_os_family | lower }}.yml
+  when: php_settings

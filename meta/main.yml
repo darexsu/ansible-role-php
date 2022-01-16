@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  author: "darexsu"
+  role_name: "zabbix_server"
+  description: Easy install for Linux.
+  company: ""
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - focal
+    - name: EL
+      versions:
+        - 7
+        - 8
+  galaxy_tags:
+    - server

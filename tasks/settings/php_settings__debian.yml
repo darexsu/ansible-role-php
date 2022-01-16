@@ -1,0 +1,20 @@
+---
+- name: update php.ini config from template
+  template:
+    src: php_ini.j2
+    dest: "/etc/php/{{ php_settings__version }}/fpm/php.ini"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart php-fpm debian
+  when: php_settings__php_ini
+
+- name: add webserver config php-fpm-pool
+  template:
+    src: php_pool.j2
+    dest: "/etc/php/{{ php_settings__version }}/fpm/pool.d/{{ php_settings__pool_unix_user }}_pool.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart php-fpm debian
+  when: php_settings__pool

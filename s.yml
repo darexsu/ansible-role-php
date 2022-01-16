@@ -1,0 +1,23 @@
+---
+- name: test
+  hosts: myhosts
+  become: true
+  vars:
+    ansible_user: "vagrant"
+
+  roles:
+    - role: darexsu.php
+      vars:
+        php_install: true
+        php_settings: true
+        php_settings__pool_webserver_user: "www-data"
+        php_settings__pool_webserver_group: "www-data"
+        php_settings__pool_tcp_ip_socket: true
+        php_settings__pool_unix_socket: false
+      #  php_actions: true
+   # - role: darexsu.nginx
+    # vars:
+     #   nginx_install: true
+     #   nginx_settings: true
+     #   nginx_settings__vhost_root: "/usr/share/zabbix/"
+     #   nginx_actions: true

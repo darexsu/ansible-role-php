@@ -1,0 +1,10 @@
+---
+- name: restart php-fpm debian
+  service:
+    name: php{{ php_install__version }}-fpm
+    state: restarted
+
+- name: restart php-fpm redhat
+  service:
+    name: php{{ php_install__version | replace('.','')}}-php-fpm
+    state: restarted

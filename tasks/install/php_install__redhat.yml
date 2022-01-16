@@ -1,0 +1,58 @@
+---
+- name: import epel repo gpg key
+  ansible.builtin.rpm_key:
+    key: "{{ php_install__epel_repo_gpg_key_url }}"
+    state: present
+
+- name: install epel repo
+  ansible.builtin.package:
+    name: "{{ php_install__epel_repo_url }}"
+    state: present  
+
+- name: import remi repo gpg key
+  ansible.builtin.rpm_key:
+    key: "{{ php_install__remi_repo_gpg_key_url }}"
+    state: present
+
+- name: install remi repo
+  ansible.builtin.package:
+    name: "{{ php_install__remi_repo_url }}"
+    state: present
+
+- name: service facts
+  ansible.builtin.service_facts:
+
+- name: ensure php-fpm is stopped
+  ansible.builtin.service:
+    name: "php{{ php_install__version | replace('.','')}}-php-fpm"
+    state: stopped
+  when: ansible_facts.services is search("-php-fpm.service")
+  ignore_errors: true
+
+- name: ensure apache2 is stopped
+  ansible.builtin.service:
+    name: "apache2"
+    state: stopped
+  when: ansible_facts.services is search("apache2.service")
+
+- name: install php{{ php_install__version | replace('.','')}}.
+  ansible.builtin.package:
+    name: "php{{ php_install__version | replace('.','')}}"
+    state: present
+    enablerepo: "remi,remi-php{{ php_install__version | replace('.','')}}"
+    update_cache: true
+  ignore_errors: true
+
+- name: install php{{ php_install__version }} modules.
+  ansible.builtin.package:
+    name: "php{{ php_install__version | replace('.','')}}-php-{{ item }}"
+    state: present
+    enablerepo: "remi,remi-php{{ php_install__version | replace('.','')}}"
+    update_cache: true
+  ignore_errors: true
+  with_items: "{{ php_install__list }}"
+
+- name: ensure php{{ php_install__version | replace('.','')}}-php-fpm is started
+  ansible.builtin.service:
+    name: "php{{ php_install__version | replace('.','')}}-php-fpm"
+    state: started

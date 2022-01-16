@@ -1,0 +1,72 @@
+---
+# install
+php_install: false
+php_install__version: "7.1"
+php_install__list: [bcmath, common, fpm, cli, dev, gd, ldap, curl, imap, xml, xmlrpc, mbstring, mysql, mcrypt, zip]
+php_install__dependencies_debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+php_install__dependencies_redhat: []
+# install -> sury repo
+php_install__sury_repo: true
+php_install__sury_repo_url: "https://packages.sury.org/php"
+php_install__sery_repo_gpg_key: "{{ php_install__repo_url }}/apt.gpg"
+php_install__sury_repo_path: "deb {{ php_install__repo_url }}/ {{ ansible_distribution_release }} main"
+# install -> epel repo
+php_install__epel_repo: true
+php_install__epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+php_install__epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+# install -> remi repo
+php_install__remi_repo: true
+php_install__remi_repo_url: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+php_install__remi_repo_gpg_key_url: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
+
+# settings
+php_settings: false
+php_settings__version: "{{ php_install__version }}"
+# settings -> php.ini 
+php_settings__php_ini: true
+php_settings__php_ini_expose_php: "On"
+php_settings__php_ini_memory_limit: "256M"
+php_settings__php_ini_max_execution_time: "300"
+php_settings__php_ini_max_input_time: "300"
+php_settings__php_ini_max_input_vars: "1000"
+php_settings__php_ini_realpath_cache_size: "32K"
+php_settings__php_ini_file_uploads: "On"
+php_settings__php_ini_upload_max_filesize: "64M"
+php_settings__php_ini_max_file_uploads: "20"
+php_settings__php_ini_post_max_size: "32M"
+php_settings__php_ini_date_timezone: "America/Chicago"
+php_settings__php_ini_allow_url_fopen: "On"
+php_settings__php_ini_sendmail_path: "/usr/sbin/sendmail -t -i"
+php_settings__php_ini_output_buffering: "4096"
+php_settings__php_ini_short_open_tag: "Off"
+php_settings__php_ini_disable_functions: []
+php_settings__php_ini_precision: 14
+php_settings__php_ini_serialize_precision: "-1"
+php_settings__php_ini_session_cookie_lifetime: 0
+php_settings__php_ini_session_gc_probability: 1
+php_settings__php_ini_session_gc_divisor: 1000
+php_settings__php_ini_session_gc_maxlifetime: 1440
+php_settings__php_ini_session_save_handler: files
+php_settings__php_ini_session_save_path: ''
+php_settings__php_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+php_settings__php_ini_display_errors: "Off"
+php_settings__php_ini_display_startup_errors: "Off"
+# settings -> pool.d
+php_settings__pool: true
+php_settings__pool_file: "www.conf"
+php_settings__pool_webserver_user: "www-data"
+php_settings__pool_webserver_group: "www-data"
+php_settings__pool_pm: "dynamic"
+php_settings__pool_pm_max_children: "10"
+php_settings__pool_pm_start_servers: "5"
+php_settings__pool_pm_min_spare_servers: "5"
+php_settings__pool_pm_max_spare_servers: "5"
+php_settings__pool_pm_max_requests: "500"
+# settings -> pool.d -> tcp_ip_socket (default enable)
+php_settings__pool_tcp_ip_socket: true
+php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9000"
+# settings -> pool.d -> unix socket (default disable)
+php_settings__pool_unix_socket: false
+php_settings__pool_unix_user: "{{ ansible_user }}"
+php_settings__pool_unix_group: "{{ ansible_user }}"
+php_settings__pool_socket_listen: "/run/php/php{{ php_install__version }}-{{ ansible_user }}.sock"
