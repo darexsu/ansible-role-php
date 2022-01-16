@@ -63,7 +63,9 @@ ansible-galaxy install darexsu.php
 ```
 Customize:
 
-You can custum your tasks. For example: only update php.ini
+You can custum your tasks. For example:
+
+Update php.ini only
 
 ```yaml
 ---
@@ -72,9 +74,28 @@ You can custum your tasks. For example: only update php.ini
   roles:
     - role: darexsu.php
       vars:
-        php_settings: true                              # enable ./task/install/*
+        php_settings: true                              # enable ./task/settings/*
         php_settings__version: "8.0"                    # you can change to 7.1, 7.2, 7.3 etc
         php_settings__php_ini: true                     # enable ./templates/php_ini.j2
         php_settings__php_ini_date_timezone: "America/Chicago" # edit ./templates/php_ini.j2
 
+```
+
+Create pool.d/*conf for Nginx only
+
+```yaml
+---
+- hosts: all
+
+  roles:
+    - role: darexsu.php
+      vars:
+        php_settings: true                              # enable ./task/settings/*
+        php_settings__version: "8.0"                    # you can change to 7.1, 7.2, 7.3 etc       
+        php_settings__pool: true                        # enable ./templates/php_ini.j2
+        php_settings__pool_file: "www.conf"             # name of pool
+        php_settings__pool_webserver_user: "nginx"      # user who start web-server
+        php_settings__pool_webserver_group: "nginx"       
+        php_settings__pool_tcp_ip_socket: true
+        php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9000"
 ```
