@@ -1,5 +1,7 @@
 # Ansible role PHP 
 
+[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)
+
 Optional:
 
   - install PHP {version} from Sury/Remi repositories
