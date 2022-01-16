@@ -29,13 +29,15 @@ ansible-galaxy install darexsu.php
   roles:
     - role: darexsu.php
       vars:
-        php_install: true
+        php_install: true                                 # enable ./task/install/*
         php_install__version: "8.0"                       # you can change to 7.1, 7.2, 7.3 etc
-        php_settings: true
+        php_settings: true                                # enable ./task/settings/*
+        php_settings__php_ini: true                       # enable ./templates/php_ini.j2
+        php_settings__pool: true                          # enable ./templates/php_pool.j2
         php_settings__pool_webserver_user: "www-data"     # you can change to apache or nginx
         php_settings__pool_webserver_group: "www-data"    # you can change to apache or nginx
         php_settings__pool_tcp_ip_socket: true            # enable tcp/ip socket
-        php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9000"
+        php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9000" # listen port: 9000 on localhost
 ```
 2.2) Example playbook for php 8.0, unix socket
 
@@ -46,9 +48,11 @@ ansible-galaxy install darexsu.php
   roles:
     - role: darexsu.php
       vars:
-        php_install: true
+        php_install: true                                # enable ./task/install/*
         php_install__version: "8.0"                      # you can change to 7.1, 7.2, 7.3 etc
-        php_settings: true
+        php_settings: true                               # enable ./task/settings/*
+        php_settings__php_ini: true                      # enable ./templates/php_ini.j2
+        php_settings__pool: true                         # enable ./templates/php_pool.j2
         php_settings__pool_webserver_user: "www-data"    # you can change to apache or nginx
         php_settings__pool_webserver_group: "www-data"   # you can change to apache or nginx 
         php_settings__pool_tcp_ip_socket: false          # disable tcp/ip socket
@@ -56,4 +60,21 @@ ansible-galaxy install darexsu.php
         php_settings__pool_unix_user: "username"         # owner socket
         php_settings__pool_unix_group: "username"
         php_settings__pool_socket_listen: "/run/php/php{{ php_install__version }}-{{ php_settings__pool_unix_user }}.sock"
+```
+Customize:
+
+You can custum your tasks. For example: only update php.ini
+
+```yaml
+---
+- hosts: all
+
+  roles:
+    - role: darexsu.php
+      vars:
+        php_settings: true                              # enable ./task/install/*
+        php_settings__version: "8.0"                    # you can change to 7.1, 7.2, 7.3 etc
+        php_settings__php_ini: true                     # enable ./templates/php_ini.j2
+        php_settings__php_ini_date_timezone: "America/Chicago" # edit ./templates/php_ini.j2
+
 ```
