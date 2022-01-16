@@ -63,7 +63,7 @@ ansible-galaxy install darexsu.php
 ```
 Customize:
 
-You can custum your tasks. For example:
+You can custom your tasks. For example:
 
 Update php.ini only. Note: PHP already installed
 
