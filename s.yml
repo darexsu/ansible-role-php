@@ -1,9 +1,7 @@
 ---
 - name: test
   hosts: myhosts
-  become: true
-  vars:
-    ansible_user: "vagrant"
+  become: true  
 
   roles:
     - role: darexsu.php
