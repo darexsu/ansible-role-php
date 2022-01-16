@@ -26,6 +26,7 @@ ansible-galaxy install darexsu.php
 ```yaml
 ---
 - hosts: all
+  become: yes
 
   roles:
     - role: darexsu.php
@@ -45,6 +46,7 @@ ansible-galaxy install darexsu.php
 ```yaml
 ---
 - hosts: all
+  become: yes
 
   roles:
     - role: darexsu.php
@@ -71,6 +73,7 @@ Update php.ini only. Note: PHP already installed
 ```yaml
 ---
 - hosts: all
+  become: yes
 
   roles:
     - role: darexsu.php
@@ -87,6 +90,7 @@ Create ./pool.d/nginx.conf for Nginx web-server. Note: PHP already installed
 ```yaml
 ---
 - hosts: all
+  become: yes
 
   roles:
     - role: darexsu.php
