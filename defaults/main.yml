@@ -2,7 +2,7 @@
 # install
 php_install: false
 php_install__version: "8.0"
-php_install__list: [bcmath, common, fpm, cli, dev, gd, ldap, curl, imap, xml, xmlrpc, mbstring, mysql, mcrypt, zip]
+php_install__list: [bcmath, common, fpm, cli, gd, ldap, curl, imap, xml, xmlrpc, mbstring, mysql, mcrypt, zip]
 php_install__dependencies_debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
 php_install__dependencies_redhat: []
 # install -> sury repo (debian)
