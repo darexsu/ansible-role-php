@@ -2,18 +2,17 @@
 
 [![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)
 
-Optional:
-
-  - install PHP {version} from Sury/Remi repositories
-  - configuration ( ./pool.d/*.conf ) 
-  - configuration ( ./php.ini )
-
 Molecule testing:
 
 |    Debian     |    Ubuntu     |    CentOS     |  Rocky Linux |
 | ------------- | ------------- | ------------- | ------------ |
 |   10, 11      | 18.04, 20.04  |     7, 8      |      8       |
 
+Optional:
+
+  - install PHP {version} from Sury/Remi repositories
+  - configuration ( ./pool.d/*.conf ) 
+  - configuration ( ./php.ini )
 
 Installation:
 
