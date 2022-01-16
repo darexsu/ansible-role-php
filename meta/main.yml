@@ -23,3 +23,10 @@ galaxy_info:
         - 8
   galaxy_tags:
     - server
+    - web
+    - php
+    - php8
+    - php7
+    - php-fpm
+    - fpm
+    - web
