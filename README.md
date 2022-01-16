@@ -11,7 +11,7 @@ Molecule testing:
 
 Optional:
 
-  - install PHP {version} from Sury/Remi repositories
+  - install PHP {version}
   - configuration ( ./pool.d/*.conf ) 
   - configuration ( ./php.ini )
 
