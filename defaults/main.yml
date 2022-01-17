@@ -10,7 +10,7 @@ php_install__dependencies_redhat: []
 php_settings: false
 php_settings__version: "{{ php_install__version }}"
 # settings -> php.ini
-php_settings__php_ini: true
+php_settings__php_ini: false
 php_settings__php_ini_expose_php: "On"
 php_settings__php_ini_memory_limit: "256M"
 php_settings__php_ini_max_execution_time: "300"
@@ -39,7 +39,7 @@ php_settings__php_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 php_settings__php_ini_display_errors: "Off"
 php_settings__php_ini_display_startup_errors: "Off"
 # settings -> pool.d
-php_settings__pool: true
+php_settings__pool: false
 php_settings__pool_file: "www.conf"
 php_settings__pool_webserver_user: "www-data"
 php_settings__pool_webserver_group: "www-data"
