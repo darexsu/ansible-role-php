@@ -38,7 +38,7 @@
   ansible.builtin.service:
     name: "php{{ php_install__version }}-fpm"
     state: stopped
-  when: ansible_facts.services is search("{{ php_install__version }}-fpm.service")
+  when: ansible_facts.services is search(php_install__version + '-fpm.service')
 
 - name: ensure apache2 is stopped
   ansible.builtin.service:
