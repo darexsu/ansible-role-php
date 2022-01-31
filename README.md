@@ -73,8 +73,9 @@ ansible-galaxy install darexsu.php --force
       # - config
       php_config: true
       php_config__version: "8.0"
-      # - config  php_fpm
-      php_config__php_fpm: true
+      # - config  php.ini
+      php_config__php_ini: true
+      php_config__php_ini__template: "php_ini.j2"
 ```
 ##### Example playbook: php-fpm tcp/ip socket
 ```yaml
@@ -89,6 +90,8 @@ ansible-galaxy install darexsu.php --force
       php_config__version: "8.0"
       # - config  php_fpm
       php_config__php_fpm: true
+      php_config__php_fpm__template: "php_fpm.j2"
+      php_config__php_fpm__file: "www.conf"
       # - config  php_fpm  tcp_ip_socket
       php_config__php_fpm__tcp_ip_socket: true
       php_config__php_fpm__tcp_ip_socket_listen: "127.0.0.1:9000"
@@ -106,6 +109,8 @@ ansible-galaxy install darexsu.php --force
       php_config__version: "8.0"
       # - config  php_fpm
       php_config__php_fpm: true
+      php_config__php_fpm__template: "php_fpm.j2"
+      php_config__php_fpm__file: "www.conf"
       # - config  php_fpm  unix socket
       php_config__php_fpm__unix_socket: false
       php_config__php_fpm__unix_socket__user: "username"
