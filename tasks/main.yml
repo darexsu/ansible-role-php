@@ -3,6 +3,6 @@
   include_tasks: ./tasks/install/php_install__{{ ansible_os_family | lower }}.yml
   when: php_install
 
-- name: include php settings
-  include_tasks: ./tasks/settings/php_settings__{{ ansible_os_family | lower }}.yml
-  when: php_settings
+- name: include php config
+  include_tasks: ./tasks/config/php_config__{{ ansible_os_family | lower }}.yml
+  when: php_config

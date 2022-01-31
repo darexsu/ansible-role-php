@@ -12,4 +12,4 @@
     - role: darexsu.php
       vars:
         php_install: true
-        php_settings: true
+        php_config: true

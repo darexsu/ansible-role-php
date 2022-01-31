@@ -1,0 +1,26 @@
+[{{ php_config__php_fpm__webserver_user }}-{{ php_config__php_fpm__unix_socket__user }}]
+
+{% if php_config__php_fpm__tcp_ip_socket %}
+listen = {{ php_config__php_fpm__tcp_ip_socket__listen }}
+
+user = {{ php_config__php_fpm__webserver_user }}
+group = {{ php_config__php_fpm__webserver_group }}
+{% endif %}
+
+{% if php_config__php_fpm__unix_socket %}
+listen = {{ php_config__php_fpm__unix_socket__listen }}
+
+user = {{ php_config__php_fpm__unix_socket__user }}
+group = {{ php_config__php_fpm__unix_socket__group }}
+
+listen.owner = {{ php_config__php_fpm__webserver_user }}
+listen.group = {{ php_config__php_fpm__webserver_group }}
+listen.mode = 0660
+{% endif %}
+
+pm = {{ php_config__php_fpm__pm }}
+pm.max_children = {{ php_config__php_fpm__pm_max_children }}
+pm.start_servers = {{ php_config__php_fpm__pm_start_servers }}
+pm.min_spare_servers = {{ php_config__php_fpm__pm_min_spare_servers }}
+pm.max_spare_servers = {{ php_config__php_fpm__pm_max_spare_servers }}
+pm.max_requests = {{ php_config__php_fpm__pm_max_requests }}

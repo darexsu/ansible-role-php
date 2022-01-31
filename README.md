@@ -7,22 +7,25 @@ Molecule testing:
 | Platforms |    Debian     |    Ubuntu     |    CentOS     |  Rocky Linux |
 | --------- | ------------- | ------------- | ------------- | ------------ |
 |  Version  |   10, 11      | 18.04, 20.04  |     7, 8      |      8       |
-| PHP repository |  Sury    | ppa:ondrej    | Epel, Remi    | Epel, Remi   |
+| Repository |  Sury    | ppa:ondrej    | Epel, Remi    | Epel, Remi   |
 
-Optional:
-
-  - install PHP {version}
-  - configuration ( ./pool.d/*.conf ) 
-  - configuration ( ./php.ini )
-
-Installation:
-
-1) Install from Galaxy
+### 1) Install role from Galaxy
 ```
-ansible-galaxy install darexsu.php
+ansible-galaxy install darexsu.php --force
 ```
-2.1) Example playbook for php 8.0, TCP/IP socket
 
+### 2) Example playbooks: 
+  
+  - [full playbook](#full-playbook)  
+    - install
+      - [php modules](#example-playbook-install-php-modules) 
+    - config
+      - [php.ini](#example-playbook-phpini)
+      - [php-fpm tcp/ip socket](#example-playbook-php-fpm-tcpip-socket)
+      - [php-fpm unix socket](#example-playbook-php-fpm-unix-socket)
+
+
+##### Full playbook
 ```yaml
 ---
 - hosts: all
@@ -30,19 +33,22 @@ ansible-galaxy install darexsu.php
 
   roles:
     - role: darexsu.php
-      vars:
-        php_install: true                                 # enable ./task/install/*
-        php_install__version: "8.0"                       # you can change to 7.1, 7.2, 7.3 etc
-        php_settings: true                                # enable ./task/settings/*
-        php_settings__php_ini: true                       # enable ./templates/php_ini.j2
-        php_settings__pool: true                          # enable ./templates/php_pool.j2
-        php_settings__pool_webserver_user: "www-data"     # you can change to apache or nginx
-        php_settings__pool_webserver_group: "www-data"    # you can change to apache or nginx
-        php_settings__pool_tcp_ip_socket: true            # enable tcp/ip socket
-        php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9000" # listen port: 9000 on localhost
-```
-2.2) Example playbook for php 8.0, unix socket
+      # install
+      php_install: true      
+      php_install__version: "8.0"
 
+      # config 
+      php_config: true
+      # - config  php.ini
+      php_config__php_ini: true
+      # - config  php_fpm 
+      php_config__php_fpm: true     
+      # - config  php_fpm  tcp_ip_socket
+      php_config__php_fpm__tcp_ip_socket: true
+      php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
+
+```
+##### Example playbook: install php modules
 ```yaml
 ---
 - hosts: all
@@ -50,26 +56,13 @@ ansible-galaxy install darexsu.php
 
   roles:
     - role: darexsu.php
-      vars:
-        php_install: true                                # enable ./task/install/*
-        php_install__version: "8.0"                      # you can change to 7.1, 7.2, 7.3 etc
-        php_settings: true                               # enable ./task/settings/*
-        php_settings__php_ini: true                      # enable ./templates/php_ini.j2
-        php_settings__pool: true                         # enable ./templates/php_pool.j2
-        php_settings__pool_webserver_user: "www-data"    # you can change to apache or nginx
-        php_settings__pool_webserver_group: "www-data"   # you can change to apache or nginx 
-        php_settings__pool_tcp_ip_socket: false          # disable tcp/ip socket
-        php_settings__pool_unix_socket: true             # enable unix socket
-        php_settings__pool_unix_user: "username"         # owner socket
-        php_settings__pool_unix_group: "username"
-        php_settings__pool_socket_listen: "/run/php/php{{ php_install__version }}-{{ php_settings__pool_unix_user }}.sock"
+      # install
+      php_install: true      
+      php_install__version: "8.0"
+      php_install__list: [bcmath, common, fpm, cli, gd, ldap]
+  
 ```
-Customize:
-
-You can custom your tasks. For example:
-
-Update php.ini only. Note: PHP already installed
-
+##### Example playbook: php.ini
 ```yaml
 ---
 - hosts: all
@@ -77,16 +70,13 @@ Update php.ini only. Note: PHP already installed
 
   roles:
     - role: darexsu.php
-      vars:
-        php_settings: true                              # enable ./task/settings/*
-        php_settings__version: "8.0"                    # you can change to 7.1, 7.2, 7.3 etc
-        php_settings__php_ini: true                     # enable ./templates/php_ini.j2
-        php_settings__php_ini_date_timezone: "America/Chicago" # edit ./templates/php_ini.j2
-
+      # - config
+      php_config: true
+      php_config__version: "8.0"
+      # - config  php_fpm
+      php_config__php_fpm: true
 ```
-
-Create ./pool.d/nginx.conf for Nginx web-server. Note: PHP already installed
-
+##### Example playbook: php-fpm tcp/ip socket
 ```yaml
 ---
 - hosts: all
@@ -94,13 +84,31 @@ Create ./pool.d/nginx.conf for Nginx web-server. Note: PHP already installed
 
   roles:
     - role: darexsu.php
-      vars:
-        php_settings: true                              # enable ./task/settings/*
-        php_settings__version: "8.0"                    # you can change to 7.1, 7.2, 7.3 etc       
-        php_settings__pool: true                        # enable ./templates/php_ini.j2
-        php_settings__pool_file: "nginx.conf"           # name of pool
-        php_settings__pool_webserver_user: "nginx"      # user who start web-server
-        php_settings__pool_webserver_group: "nginx"       
-        php_settings__pool_tcp_ip_socket: true
-        php_settings__pool_tcp_ip_socket_listen: "127.0.0.1:9001"
+      # - config
+      php_config: true
+      php_config__version: "8.0"
+      # - config  php_fpm
+      php_config__php_fpm: true
+      # - config  php_fpm  tcp_ip_socket
+      php_config__php_fpm__tcp_ip_socket: true
+      php_config__php_fpm__tcp_ip_socket_listen: "127.0.0.1:9000"
+```
+##### Example playbook: php-fpm unix socket
+```yaml
+---
+- hosts: all
+  become: yes
+
+  roles:
+    - role: darexsu.php
+      # - config
+      php_config: true
+      php_config__version: "8.0"
+      # - config  php_fpm
+      php_config__php_fpm: true
+      # - config  php_fpm  unix socket
+      php_config__php_fpm__unix_socket: false
+      php_config__php_fpm__unix_socket__user: "username"
+      php_config__php_fpm__unix_socket__group: "username"
+      php_config__php_fpm__unix_socket__listen: "/run/php/php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
 ```

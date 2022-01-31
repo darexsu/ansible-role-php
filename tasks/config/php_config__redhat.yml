@@ -1,49 +1,49 @@
 ---
 - name: update php.ini config from template
   template:
-    src: php_ini.j2
-    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php.ini"
+    src: "{{ php_config__php_ini__template }}"
+    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/{{ php_config__php_ini__file }}"
     owner: root
     group: root
     mode: 0644
   notify: restart php-fpm redhat
-  when: php_settings__php_ini
+  when: php_config__php_ini
 
 - name: ensure web-server user exsist
   block:
     - name: ensure web-server group exsist
       ansible.builtin.group:
-        name: "{{ php_settings__pool_webserver_group }}"
+        name: "{{ php_config__php_fpm__webserver_group }}"
 
     - name: ensure web-server user exsist
       ansible.builtin.user:
-        name: "{{ php_settings__pool_webserver_user }}"
-        group: "{{ php_settings__pool_webserver_group }}"
+        name: "{{ php_config__php_fpm__webserver_user }}"
+        group: "{{ php_config__php_fpm__webserver_group }}"
 
 - name: ensure directory and user exsist for unix socket
   block:
     - name: ensure web-server group exsist
       ansible.builtin.group:
-        name: "{{ php_settings__pool_unix_group }}"
+        name: "{{ php_config__php_fpm__unix_socket__group }}"
 
     - name: ensure web-server user exsist
       ansible.builtin.user:
-        name: "{{ php_settings__pool_unix_user }}"
-        group: "{{ php_settings__pool_unix_group }}"
+        name: "{{ php_config__php_fpm__unix_socket__user }}"
+        group: "{{ php_config__php_fpm__unix_socket__group }}"
 
     - name: create a directory for unix socket
       ansible.builtin.file:
         path: /run/php/
         state: directory
         mode: 0755
-  when: php_settings__pool_unix_socket
+  when: php_config__php_fpm__unix_socket
 
 - name: add webserver config php-fpm-pool
   template:
-    src: php_pool.j2
-    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d/{{ php_settings__pool_file }}"
+    src: "{{ php_config__php_fpm__template }}"
+    dest: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d/{{ php_config__php_fpm__file }}"
     owner: root
     group: root
     mode: 0644
   notify: restart php-fpm redhat
-  when: php_settings__pool
+  when: php_config__php_fpm
