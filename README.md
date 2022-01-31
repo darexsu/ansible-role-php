@@ -112,7 +112,7 @@ ansible-galaxy install darexsu.php --force
       php_config__php_fpm__template: "php_fpm.j2"
       php_config__php_fpm__file: "www.conf"
       # - config  php_fpm  unix socket
-      php_config__php_fpm__unix_socket: false
+      php_config__php_fpm__unix_socket: true
       php_config__php_fpm__unix_socket__user: "username"
       php_config__php_fpm__unix_socket__group: "username"
       php_config__php_fpm__unix_socket__listen: "/run/php/php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
