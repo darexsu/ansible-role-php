@@ -2,14 +2,17 @@
 - name: Converge
   hosts: all
 
-  pre_tasks:
-  - name: Update apt cache.
-    apt: update_cache=yes cache_valid_time=600
-    when: ansible_os_family == 'Debian'
-    changed_when: false
-
   roles:
     - role: darexsu.php
-      vars:
-        php_install: true
-        php_config: true
+      # - install
+      php_install: true
+      php_install__version: "8.0"
+      # - config
+      php_config: true
+      # - config  php.ini
+      php_config__php_ini: true
+      # - config  php_fpm
+      php_config__php_fpm: true
+      # - config  php_fpm  tcp_ip_socket
+      php_config__php_fpm__tcp_ip_socket: true
+      php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
