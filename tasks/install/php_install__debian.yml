@@ -1,9 +1,10 @@
 ---
 - name: ensure dependencies are installed.
   ansible.builtin.apt:
-    name: "{{ php_install__dependencies_debian }}"
+    name: "{{ item }}"
     state: present
     update_cache: true
+  with_items: "{{ php_install__dependencies_debian }}"
 
 - name: repo for debian
   block:
