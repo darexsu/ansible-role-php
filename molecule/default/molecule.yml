@@ -1,20 +1,22 @@
 ---
 dependency:
-  name: galaxy
+  name: galaxy 
 driver:
   name: docker
 platforms:
   - name: instance
-    image: "darexsu/molecule-${MOLECULE_DISTRO:-ubuntu-2004}:latest"
+    image: "darexsu/molecule-${MOLECULE_DISTRO:-debian-11}:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
-    pre_build_image: true   
+    pre_build_image: true
 provisioner:
   name: ansible
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  env:
+    ANSIBLE_COMMAND: ${MOLECULE_COMMAND:-""}
 scenario:
   create_sequence:
     - dependency
@@ -52,5 +54,5 @@ scenario:
     # - verify
     # - cleanup
     - destroy
-#lint: |
-#  yamllint .
+# lint: |
+#   yamllint .
