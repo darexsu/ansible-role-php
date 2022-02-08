@@ -80,3 +80,5 @@ php_config__php_fpm__unix_socket: false
 php_config__php_fpm__unix_socket__user: "username"
 php_config__php_fpm__unix_socket__group: "username"
 php_config__php_fpm__unix_socket__listen: "/run/php/php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
+# - config  php_fpm  remove file
+php_config__php_fpm__remove_file: ""
