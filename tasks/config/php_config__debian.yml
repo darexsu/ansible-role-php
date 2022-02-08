@@ -54,4 +54,3 @@
     mode: 0644
   notify: restart php-fpm debian
   when: php_config__php_fpm
-
