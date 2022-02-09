@@ -34,6 +34,3 @@
 - name: include php config remi
   include_tasks: ./tasks/config/php_config__redhat_remi.yml
   when: php_config and ansible_os_family == "RedHat" and php_install__remi_repo
-
-
-
