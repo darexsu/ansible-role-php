@@ -1,0 +1,47 @@
+---
+- name: ensure dependencies are installed.
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ php_install__dependencies_debian }}"
+
+- name: add php repository
+  ansible.builtin.apt_repository:
+    repo: "{{ php_install__ondrej_repo_name }}"
+    state: present
+
+- name: service facts
+  ansible.builtin.service_facts:
+
+- name: ensure php-fpm is stopped
+  ansible.builtin.service:
+    name: "php{{ php_install__version }}-fpm"
+    state: stopped
+  when: ansible_facts.services is search(php_install__version + '-fpm.service')
+
+- name: ensure apache2 is stopped
+  ansible.builtin.service:
+    name: "apache2"
+    state: stopped
+  when: ansible_facts.services is search("apache2.service")
+
+- name: install php{{ php_install__version }}
+  ansible.builtin.apt:
+    name: "php{{ php_install__version }}"
+    state: present
+    update_cache: yes
+  ignore_errors: yes  
+
+- name: install php{{ php_install__version }} packages
+  ansible.builtin.apt:
+    name: "php{{ php_install__version }}-{{ item }}"
+    state: present
+    update_cache: yes
+  ignore_errors: yes
+  with_items: "{{ php_install__list }}"
+
+- name: ensure php{{ php_install__version }}-fpm is started
+  ansible.builtin.service:
+    name: "php{{ php_install__version }}-fpm"
+    state: started

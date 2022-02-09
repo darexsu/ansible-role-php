@@ -13,12 +13,19 @@
       # - install
       php_install: true
       php_install__version: "8.0"
+      # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true
       # - config
       php_config: true
       # - config  php.ini
       php_config__php_ini: true
       # - config  php_fpm
       php_config__php_fpm: true
-      # - config  php_fpm  tcp_ip_socket
-      php_config__php_fpm__tcp_ip_socket: true
-      php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
+      # - config  php_fpm  unix socket
+      php_config__php_fpm__unix_socket: true
+      php_config__php_fpm__unix_socket__user: "username"
+      php_config__php_fpm__unix_socket__group: "username"     
+      # - config  php_fpm  remove file
+      php_config__php_fpm__remove_file: "www.conf"

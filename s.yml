@@ -1,0 +1,35 @@
+---
+- name: jjj
+  hosts: debian
+  become: true
+
+  roles:
+    - role: darexsu.php
+      # install
+      php_install: true      
+      php_install__version: "8.0"
+      php_install__sury_repo: true
+      # - config
+      php_config: true
+      php_config__version: "8.0"
+      # - config  php.ini
+      php_config__php_ini: true
+      php_config__php_ini__template: "php_ini.j2"
+      # - config  php_fpm
+      php_config__php_fpm: true
+      php_config__php_fpm__template: "php_fpm.j2"
+      php_config__php_fpm__file: "test.conf"
+      php_config__php_fpm__webserver_user: "www-data"
+      php_config__php_fpm__webserver_group: "www-data"
+      php_config__php_fpm__pm: "dynamic"
+      php_config__php_fpm__pm_max_children: "10"
+      php_config__php_fpm__pm_start_servers: "5"
+      php_config__php_fpm__pm_min_spare_servers: "5"
+      php_config__php_fpm__pm_max_spare_servers: "5"
+      php_config__php_fpm__pm_max_requests: "500"
+      # - config  php_fpm  unix socket
+      php_config__php_fpm__unix_socket: true
+      php_config__php_fpm__unix_socket__user: "username4"
+      php_config__php_fpm__unix_socket__group: "username4"     
+      # - config  php_fpm  remove file
+      php_config__php_fpm__remove_file: "www.conf"

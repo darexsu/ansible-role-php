@@ -6,32 +6,6 @@
     update_cache: true
   with_items: "{{ php_install__dependencies_debian }}"
 
-- name: repo for debian
-  block:
-    - name: add php repository gpg key
-      ansible.builtin.apt_key:
-        url: "{{ php_install__sury_repo_gpg_key }}"
-        state: present
-      when: php_install__sury_repo
-
-    - name: add php repository
-      ansible.builtin.apt_repository:
-        repo: "{{ php_install__sury_repo_path }}"
-        state: present
-        update_cache: yes
-      when: php_install__sury_repo
-  when: ansible_distribution == "Debian"
-
-- name: repo for ubuntu
-  block:
-    - name: add php repository
-      ansible.builtin.apt_repository:
-        repo: "{{ php_install__ondrej_repo_name }}"
-        state: present
-        update_cache: yes
-      when: php_install__ondrej_repo
-  when: ansible_distribution == "Ubuntu"
-
 - name: service facts
   ansible.builtin.service_facts:
 
@@ -51,12 +25,14 @@
   ansible.builtin.apt:
     name: "php{{ php_install__version }}"
     state: present
+    update_cache: yes
   ignore_errors: yes  
 
 - name: install php{{ php_install__version }} packages
   ansible.builtin.apt:
     name: "php{{ php_install__version }}-{{ item }}"
     state: present
+    update_cache: yes
   ignore_errors: yes
   with_items: "{{ php_install__list }}"
 

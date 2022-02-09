@@ -8,8 +8,15 @@ group = {{ php_config__php_fpm__webserver_group }}
 {% endif %}
 
 {% if php_config__php_fpm__unix_socket %}
-listen = {{ php_config__php_fpm__unix_socket__listen }}
-
+{% if ansible_os_family == "Debian" %}
+listen = /var/run/php/{{ php_config__php_fpm__unix_socket__name }}
+{% endif %}
+{% if ansible_os_family == "RedHat" and php_install__remi_repo %}
+listen = /var/opt/remi/php{{ php_install__version | replace('.','')}}/run/php-fpm/{{ php_config__php_fpm__unix_socket__name }}
+{% endif %}
+{% if ansible_os_family == "RedHat" and not php_install__remi_repo %}
+listen = /var/run/php-fpm/{{ php_config__php_fpm__unix_socket__name }}
+{% endif %}
 user = {{ php_config__php_fpm__unix_socket__user }}
 group = {{ php_config__php_fpm__unix_socket__group }}
 

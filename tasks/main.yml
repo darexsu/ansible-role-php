@@ -1,8 +1,39 @@
 ---
-- name: include php install
-  include_tasks: ./tasks/install/php_install__{{ ansible_os_family | lower }}.yml
-  when: php_install
+- name: include php install from distro
+  include_tasks: ./tasks/install/php_install__debian_distro.yml
+  when: php_install and ansible_distribution == "Debian" and not php_install__sury_repo
+
+- name: include php install from sury
+  include_tasks: ./tasks/install/php_install__debian_sury.yml
+  when: php_install and ansible_distribution == "Debian" and php_install__sury_repo
+
+- name: include php install from distro
+  include_tasks: ./tasks/install/php_install__ubuntu_distro.yml
+  when: php_install and ansible_distribution == "Ubuntu" and not php_install__ondrej_repo
+
+- name: include php install from andrej
+  include_tasks: ./tasks/install/php_install__ubuntu_andrej.yml
+  when: php_install and ansible_distribution == "Ubuntu" and php_install__ondrej_repo
+
+- name: include php install from distro
+  include_tasks: ./tasks/install/php_install__redhat_distro.yml
+  when: php_install and ansible_os_family == "RedHat" and not php_install__remi_repo
+
+- name: include php install from remi
+  include_tasks: ./tasks/install/php_install__redhat_remi.yml
+  when: php_install and ansible_os_family == "RedHat" and php_install__remi_repo
 
 - name: include php config
-  include_tasks: ./tasks/config/php_config__{{ ansible_os_family | lower }}.yml
-  when: php_config
+  include_tasks: ./tasks/config/php_config__debian.yml
+  when: php_config and ansible_os_family == "Debian"
+
+- name: include php config remi
+  include_tasks: ./tasks/config/php_config__redhat_distro.yml
+  when: php_config and ansible_os_family == "RedHat" and not php_install__remi_repo
+
+- name: include php config remi
+  include_tasks: ./tasks/config/php_config__redhat_remi.yml
+  when: php_config and ansible_os_family == "RedHat" and php_install__remi_repo
+
+
+

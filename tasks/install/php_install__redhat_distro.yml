@@ -1,0 +1,39 @@
+---
+- name: service facts
+  ansible.builtin.service_facts:
+
+- name: ensure php-fpm is stopped
+  ansible.builtin.service:
+    name: "php-fpm"
+    state: stopped
+  when: ansible_facts.services is search('php-fpm.service')
+  ignore_errors: true
+
+- name: ensure apache2 is stopped
+  ansible.builtin.service:
+    name: "apache2"
+    state: stopped
+  when: ansible_facts.services is search("apache2.service")
+
+- name: install php{{ php_install__version }}.
+  ansible.builtin.package:
+    name: "php"
+    state: present
+    enablerepo: "php:{{ php_install__version }}"
+    update_cache: true
+  ignore_errors: true
+
+- name: install php{{ php_install__version }} modules.
+  ansible.builtin.package:
+    name: "php-{{ item }}"
+    state: present
+    enablerepo: "php:{{ php_install__version }}"
+    update_cache: true
+  ignore_errors: true
+  with_items: "{{ php_install__list }}"
+
+- name: ensure php-fpm is started
+  ansible.builtin.service:
+    name: "php-fpm"
+    state: started
+    enabled: yes

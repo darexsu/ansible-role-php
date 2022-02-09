@@ -7,7 +7,7 @@ Molecule testing:
 | Platforms |    Debian     |    Ubuntu     |    Rocky Linux| Oracle Linux |
 | --------- | ------------- | ------------- | ------------- | ------------ |
 |  Version  |   10, 11      | 18.04, 20.04  |      8      |      8       |
-| Repository |  Sury    | ppa:ondrej    | Epel, Remi    | Epel, Remi   |
+| Repo      |  Distro, Sury    | Distro, ppa:ondrej    |  Distro, Remi    |  Distro, Remi   |
 
 ### 1) Install role from Galaxy
 ```
@@ -18,6 +18,7 @@ ansible-galaxy install darexsu.php --force
   
   - [full playbook](#full-playbook)  
     - install
+      - [from distro's repo](#from-distros-repo) 
       - [php modules](#example-playbook-install-php-modules) 
     - config
       - [php.ini](#example-playbook-phpini)
@@ -33,9 +34,13 @@ ansible-galaxy install darexsu.php --force
 
   roles:
     - role: darexsu.php
-      # install
+      # - install
       php_install: true      
       php_install__version: "8.0"
+      # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true
 
       # config 
       php_config: true
@@ -48,7 +53,7 @@ ansible-galaxy install darexsu.php --force
       php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
 
 ```
-##### Example playbook: install php modules
+##### Example playbook: from distro's repo
 ```yaml
 ---
 - hosts: all
@@ -58,8 +63,29 @@ ansible-galaxy install darexsu.php --force
     - role: darexsu.php
       # install
       php_install: true      
+      php_install__version: "7.4"      
+      # - install  repo
+      php_install__sury_repo: false
+      php_install__ondrej_repo: false
+      php_install__remi_repo: false
+  
+```
+##### Example playbook: install php modules
+```yaml
+---
+- hosts: all
+  become: yes
+
+  roles:
+    - role: darexsu.php
+      # - install
+      php_install: true      
       php_install__version: "8.0"
-      php_install__list: [bcmath, common, fpm, cli, gd, ldap]
+      php_install__list: [bcmath, common, fpm, cli, gd, ldap]     
+     # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true
   
 ```
 ##### Example playbook: php.ini
@@ -70,6 +96,11 @@ ansible-galaxy install darexsu.php --force
 
   roles:
     - role: darexsu.php
+      # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true      
+      
       # - config
       php_config: true
       php_config__version: "8.0"
@@ -85,6 +116,11 @@ ansible-galaxy install darexsu.php --force
 
   roles:
     - role: darexsu.php
+      # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true
+      
       # - config
       php_config: true
       php_config__version: "8.0"
@@ -104,6 +140,11 @@ ansible-galaxy install darexsu.php --force
 
   roles:
     - role: darexsu.php
+      # - install  repo
+      php_install__sury_repo: true
+      php_install__ondrej_repo: true
+      php_install__remi_repo: true
+      
       # - config
       php_config: true
       php_config__version: "8.0"
@@ -115,5 +156,5 @@ ansible-galaxy install darexsu.php --force
       php_config__php_fpm__unix_socket: true
       php_config__php_fpm__unix_socket__user: "username"
       php_config__php_fpm__unix_socket__group: "username"
-      php_config__php_fpm__unix_socket__listen: "/run/php/php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
+      php_config__php_fpm__unix_socket__name: "php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
 ```

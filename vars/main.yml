@@ -1,12 +1,19 @@
-# install -> sury repo (debian)
+# - install  sury repo 
 php_install__sury_repo_url: "https://packages.sury.org/php"
 php_install__sury_repo_gpg_key: "{{ php_install__sury_repo_url }}/apt.gpg"
 php_install__sury_repo_path: "deb {{ php_install__sury_repo_url }}/ {{ ansible_distribution_release }} main"
-# install -> ppa:ondrej repo (ubuntu)
+# - install  ondrej repo 
 php_install__ondrej_repo_name: "ppa:ondrej/php"
-# install -> epel repo (redhat)
+# - install  epel repo
 php_install__epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
 php_install__epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-# install -> remi repo (redhat)
+# - install  remi repo
 php_install__remi_repo_url: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
 php_install__remi_repo_gpg_key_url: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
+
+# - config
+php_config__redhat_remi_php_ini_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}"
+php_config__redhat_remi_pool_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d"
+php_config__redhat_distro_php_ini_path: "/etc"
+php_config__redhat_distro_pool_path: "/etc/php-fpm.d"
+
