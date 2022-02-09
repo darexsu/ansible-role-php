@@ -18,7 +18,7 @@ ansible-galaxy install darexsu.php --force
   
   - [full playbook](#full-playbook)  
     - install
-      - [from distro's repo](#from-distros-repo) 
+      - [from distro's repo](#example-playbook-from-distros-repo) 
       - [php modules](#example-playbook-install-php-modules) 
     - config
       - [php.ini](#example-playbook-phpini)
