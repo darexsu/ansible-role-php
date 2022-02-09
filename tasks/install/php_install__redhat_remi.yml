@@ -57,7 +57,3 @@
     name: "php{{ php_install__version | replace('.','')}}-php-fpm"
     state: started
     enabled: yes
-
-
-
-
