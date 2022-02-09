@@ -16,4 +16,3 @@ php_config__redhat_remi_php_ini_path: "/etc/opt/remi/php{{ php_install__version 
 php_config__redhat_remi_pool_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d"
 php_config__redhat_distro_php_ini_path: "/etc"
 php_config__redhat_distro_pool_path: "/etc/php-fpm.d"
-

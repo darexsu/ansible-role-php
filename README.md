@@ -25,7 +25,6 @@ ansible-galaxy install darexsu.php --force
       - [php-fpm tcp/ip socket](#example-playbook-php-fpm-tcpip-socket)
       - [php-fpm unix socket](#example-playbook-php-fpm-unix-socket)
 
-
 ##### Full playbook
 ```yaml
 ---
