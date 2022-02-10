@@ -1,13 +1,15 @@
 # Ansible role PHP 
 
-[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)
-
+[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)
 Molecule testing:
 
-| Platforms |    Debian     |    Ubuntu     |    Rocky Linux| Oracle Linux |
-| --------- | ------------- | ------------- | ------------- | ------------ |
-|  Version  |   10, 11      | 18.04, 20.04  |      8      |      8       |
-| Repo      |  Distro, Sury    | Distro, ppa:ondrej    |  Distro, Remi    |  Distro, Remi   |
+|  Official repo   | php version        |  Third-Party repo |   php version | 
+| Debian 11        |   PHP 7.4          | Sury              |     Latest    | 
+| Debian 10        |   PHP 7.3          | Sury              |     Latest    |   
+| Ubuntu 20.04     |   PHP 7.4          | ppa:andrej        |     Latest    | 
+| Ubuntu 18.04     |   PHP 7.2          | ppa:andrej        |     Latest    |   
+| RockyLinux 8     |   PHP 7.2          | remi              |     Latest    | 
+| OracleLinux 8    |   PHP 7.2          | remi              |     Latest    | 
 
 ### 1) Install role from Galaxy
 ```
