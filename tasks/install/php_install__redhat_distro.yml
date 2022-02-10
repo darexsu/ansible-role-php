@@ -6,7 +6,7 @@
   ansible.builtin.service:
     name: "php-fpm"
     state: stopped
-  when: ansible_facts.services is search('php-fpm.service')
+  when: ansible_facts.services is search("php-fpm.service")
   ignore_errors: true
 
 - name: ensure apache2 is stopped

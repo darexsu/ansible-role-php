@@ -8,12 +8,12 @@
 
 - name: add php repository gpg key
   ansible.builtin.apt_key:
-    url: "{{ php_install__sury_repo_gpg_key }}"
+    url: "{{ php_install__repo__sury__gpg_key }}"
     state: present
 
 - name: add php repository
   ansible.builtin.apt_repository:
-    repo: "{{ php_install__sury_repo_path }}"
+    repo: "{{ php_install__repo__sury__deb }}"
     state: present
 
 - name: service facts
@@ -50,3 +50,4 @@
   ansible.builtin.service:
     name: "php{{ php_install__version }}-fpm"
     state: started
+    enabled: yes

@@ -8,7 +8,7 @@
 
 - name: add php repository
   ansible.builtin.apt_repository:
-    repo: "{{ php_install__ondrej_repo_name }}"
+    repo: "{{ php_install__repo__ondrej__ppa }}"
     state: present
 
 - name: service facts
@@ -45,3 +45,4 @@
   ansible.builtin.service:
     name: "php{{ php_install__version }}-fpm"
     state: started
+    enabled: yes

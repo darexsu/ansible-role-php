@@ -17,22 +17,22 @@
 
 - name: import epel repo gpg key
   ansible.builtin.rpm_key:
-    key: "{{ php_install__epel_repo_gpg_key_url }}"
+    key: "{{ php_install__repo__epel__gpg_key }}"
     state: present
 
 - name: install epel repo
   ansible.builtin.package:
-    name: "{{ php_install__epel_repo_url }}"
+    name: "{{ php_install__repo__epel__rpm }}"
     state: present  
 
 - name: import remi repo gpg key
   ansible.builtin.rpm_key:
-    key: "{{ php_install__remi_repo_gpg_key_url }}"
+    key: "{{ php_install__repo__remi__gpg_key }}"
     state: present
 
 - name: install remi repo
   ansible.builtin.package:
-    name: "{{ php_install__remi_repo_url }}"
+    name: "{{ php_install__repo__remi__rpm }}"
     state: present
 
 - name: install php{{ php_install__version | replace('.','')}}.

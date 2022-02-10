@@ -2,7 +2,7 @@
 - name: update php.ini config from template
   template:
     src: "{{ php_config__php_ini__template }}"
-    dest: "{{ php_config__redhat_remi_php_ini_path }}/{{ php_config__php_ini__file }}"
+    dest: "{{ php_config__repo__remi__php_ini_path }}/{{ php_config__php_ini__file }}"
     owner: root
     group: root
     mode: 0644
@@ -34,7 +34,7 @@
 
 - name: remove config
   ansible.builtin.file:
-    path: "{{ php_config__redhat_remi_pool_path }}/{{ php_config__php_fpm__remove_file }}"
+    path: "{{ php_config__repo__remi__pool_path }}/{{ php_config__php_fpm__remove_file }}"
     state: absent  
   notify: restart php-fpm redhat remi
   when: php_config__php_fpm__remove_file and php_config__php_fpm
@@ -42,7 +42,7 @@
 - name: add webserver config php-fpm-pool
   template:
     src: "{{ php_config__php_fpm__template }}"
-    dest: "{{ php_config__redhat_remi_pool_path }}/{{ php_config__php_fpm__file }}"
+    dest: "{{ php_config__repo__remi__pool_path }}/{{ php_config__php_fpm__file }}"
     owner: root
     group: root
     mode: 0644

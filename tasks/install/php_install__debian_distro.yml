@@ -40,3 +40,4 @@
   ansible.builtin.service:
     name: "php{{ php_install__version }}-fpm"
     state: started
+    enabled: yes

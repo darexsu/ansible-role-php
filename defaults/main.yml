@@ -5,9 +5,11 @@ php_install__version: "8.0"
 php_install__list: [bcmath, common, fpm, cli, gd, ldap, curl, imap, xml, xmlrpc, mbstring, mysql, mcrypt, zip]
 php_install__dependencies_debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
 php_install__dependencies_redhat: []
-php_install__sury_repo: false
-php_install__ondrej_repo: false
-php_install__remi_repo: false
+# - install  repo
+php_install__repo: false
+php_install__repo__sury: true
+php_install__repo__ondrej: true
+php_install__repo__remi: true
 
 # - config
 php_config: false
@@ -76,8 +78,8 @@ php_config__php_fpm__tcp_ip_socket: false
 php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
 # - config  php_fpm  unix socket
 php_config__php_fpm__unix_socket: false
-php_config__php_fpm__unix_socket__user: "username"
-php_config__php_fpm__unix_socket__group: "username"
+php_config__php_fpm__unix_socket__user: "www-data"
+php_config__php_fpm__unix_socket__group: "www-data"
 php_config__php_fpm__unix_socket__name: "php{{ php_install__version }}-{{ php_config__php_fpm__unix_socket__user }}.sock"
 # - config  php_fpm  remove file
 php_config__php_fpm__remove_file: ""

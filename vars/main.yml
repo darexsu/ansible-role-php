@@ -1,18 +1,17 @@
-# - install  sury repo 
-php_install__sury_repo_url: "https://packages.sury.org/php"
-php_install__sury_repo_gpg_key: "{{ php_install__sury_repo_url }}/apt.gpg"
-php_install__sury_repo_path: "deb {{ php_install__sury_repo_url }}/ {{ ansible_distribution_release }} main"
-# - install  ondrej repo 
-php_install__ondrej_repo_name: "ppa:ondrej/php"
-# - install  epel repo
-php_install__epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
-php_install__epel_repo_gpg_key_url: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-# - install  remi repo
-php_install__remi_repo_url: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
-php_install__remi_repo_gpg_key_url: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
+# - install  repo  sury 
+php_install__repo__sury__deb: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+php_install__repo__sury__gpg_key: "https://packages.sury.org/php/apt.gpg"
+# - install  repo  ondrej 
+php_install__repo__ondrej__ppa: "ppa:ondrej/php"
+# - install  repo  epel
+php_install__repo__epel__rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+php_install__repo__epel__gpg_key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+# - install  repo  remi
+php_install__repo__remi__rpm: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+php_install__repo__remi__gpg_key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
 
 # - config
-php_config__redhat_remi_php_ini_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}"
-php_config__redhat_remi_pool_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d"
-php_config__redhat_distro_php_ini_path: "/etc"
-php_config__redhat_distro_pool_path: "/etc/php-fpm.d"
+php_config__repo__remi__php_ini_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}"
+php_config__repo__remi__pool_path: "/etc/opt/remi/php{{ php_install__version | replace('.','')}}/php-fpm.d"
+php_config__redhat__php_ini_path: "/etc"
+php_config__redhat__pool_path: "/etc/php-fpm.d"

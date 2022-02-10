@@ -1,6 +1,6 @@
 # Ansible role PHP 
 
-[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)
+[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)&emsp;(https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)
 
 Molecule testing:
 
@@ -37,9 +37,7 @@ ansible-galaxy install darexsu.php --force
       php_install: true      
       php_install__version: "8.0"
       # - install  repo
-      php_install__sury_repo: true
-      php_install__ondrej_repo: true
-      php_install__remi_repo: true
+      php_install__repo: true
 
       # config 
       php_config: true
@@ -64,9 +62,7 @@ ansible-galaxy install darexsu.php --force
       php_install: true      
       php_install__version: "7.4"      
       # - install  repo
-      php_install__sury_repo: false
-      php_install__ondrej_repo: false
-      php_install__remi_repo: false
+      php_install__repo: false
   
 ```
 ##### Example playbook: install php modules
@@ -81,10 +77,8 @@ ansible-galaxy install darexsu.php --force
       php_install: true      
       php_install__version: "8.0"
       php_install__list: [bcmath, common, fpm, cli, gd, ldap]     
-     # - install  repo
-      php_install__sury_repo: true
-      php_install__ondrej_repo: true
-      php_install__remi_repo: true
+      # - install  repo
+      php_install__repo: true
   
 ```
 ##### Example playbook: php.ini
@@ -96,9 +90,7 @@ ansible-galaxy install darexsu.php --force
   roles:
     - role: darexsu.php
       # - install  repo
-      php_install__sury_repo: true
-      php_install__ondrej_repo: true
-      php_install__remi_repo: true      
+      php_install__repo: true  
       
       # - config
       php_config: true
@@ -116,9 +108,7 @@ ansible-galaxy install darexsu.php --force
   roles:
     - role: darexsu.php
       # - install  repo
-      php_install__sury_repo: true
-      php_install__ondrej_repo: true
-      php_install__remi_repo: true
+      php_install__repo: true
       
       # - config
       php_config: true
@@ -140,9 +130,7 @@ ansible-galaxy install darexsu.php --force
   roles:
     - role: darexsu.php
       # - install  repo
-      php_install__sury_repo: true
-      php_install__ondrej_repo: true
-      php_install__remi_repo: true
+      php_install__repo: true
       
       # - config
       php_config: true
