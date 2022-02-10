@@ -20,7 +20,7 @@ ansible-galaxy install darexsu.php --force
   
   - [full playbook](#full-playbook)  
     - install
-      - [from distro's repo](#example-playbook-from-distros-repo) 
+      - [from Third-Party](#example-playbook-from-third-party) 
       - [php modules](#example-playbook-install-php-modules) 
     - config
       - [php.ini](#example-playbook-phpini)
@@ -37,9 +37,7 @@ ansible-galaxy install darexsu.php --force
     - role: darexsu.php
       # - install
       php_install: true      
-      php_install__version: "8.0"
-      # - install  repo
-      php_install__repo: true
+      php_install__version: "7.4"
 
       # config 
       php_config: true
@@ -52,7 +50,7 @@ ansible-galaxy install darexsu.php --force
       php_config__php_fpm__tcp_ip_socket__listen: "127.0.0.1:9000"
 
 ```
-##### Example playbook: from distro's repo
+##### Example playbook: from third-party
 ```yaml
 ---
 - hosts: all
@@ -60,11 +58,11 @@ ansible-galaxy install darexsu.php --force
 
   roles:
     - role: darexsu.php
-      # install
+      # - install
       php_install: true      
-      php_install__version: "7.4"      
+      php_install__version: "8.0"      
       # - install  repo
-      php_install__repo: false
+      php_install__repo: true
   
 ```
 ##### Example playbook: install php modules
@@ -77,10 +75,9 @@ ansible-galaxy install darexsu.php --force
     - role: darexsu.php
       # - install
       php_install: true      
-      php_install__version: "8.0"
-      php_install__list: [bcmath, common, fpm, cli, gd, ldap]     
-      # - install  repo
-      php_install__repo: true
+      php_install__version: "7.4"
+      php_install__list: [bcmath, common, fpm, cli, gd, ldap]    
+
   
 ```
 ##### Example playbook: php.ini
@@ -90,13 +87,12 @@ ansible-galaxy install darexsu.php --force
   become: yes
 
   roles:
-    - role: darexsu.php
+    - role: darexsu.php     
       # - install  repo
-      php_install__repo: true  
-      
+      php_install__repo: false   # <-- set "true", if php already installed from third-party      
       # - config
       php_config: true
-      php_config__version: "8.0"
+      php_config__version: "7.4"
       # - config  php.ini
       php_config__php_ini: true
       php_config__php_ini__template: "php_ini.j2"
@@ -110,11 +106,10 @@ ansible-galaxy install darexsu.php --force
   roles:
     - role: darexsu.php
       # - install  repo
-      php_install__repo: true
-      
+      php_install__repo: false   # <-- set "true", if php already installed from third-party
       # - config
       php_config: true
-      php_config__version: "8.0"
+      php_config__version: "7.4"
       # - config  php_fpm
       php_config__php_fpm: true
       php_config__php_fpm__template: "php_fpm.j2"
@@ -132,11 +127,10 @@ ansible-galaxy install darexsu.php --force
   roles:
     - role: darexsu.php
       # - install  repo
-      php_install__repo: true
-      
+      php_install__repo: false   # <-- set "true", if php already installed from third-party
       # - config
       php_config: true
-      php_config__version: "8.0"
+      php_config__version: "7.4"
       # - config  php_fpm
       php_config__php_fpm: true
       php_config__php_fpm__template: "php_fpm.j2"
