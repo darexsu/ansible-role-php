@@ -1,6 +1,6 @@
 # Ansible role PHP 
 
-[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)&emsp;(https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)
+[![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)
 
 Molecule testing:
 
