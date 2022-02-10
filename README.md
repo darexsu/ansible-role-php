@@ -4,6 +4,7 @@
 Molecule testing:
 
 |  Official repo   | php version        |  Third-Party repo |   php version | 
+| ---------------- | ------------------ | ----------------- | ------------- |
 | Debian 11        |   PHP 7.4          | Sury              |     Latest    | 
 | Debian 10        |   PHP 7.3          | Sury              |     Latest    |   
 | Ubuntu 20.04     |   PHP 7.4          | ppa:andrej        |     Latest    | 
