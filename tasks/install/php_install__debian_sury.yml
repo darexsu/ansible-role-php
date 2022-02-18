@@ -4,16 +4,16 @@
     name: "{{ item }}"
     state: present
     update_cache: true
-  with_items: "{{ php_install__dependencies_debian }}"
+  with_items: "{{ php_install.dependencies.debian }}"
 
 - name: add php repository gpg key
   ansible.builtin.apt_key:
-    url: "{{ php_install__repo__sury__gpg_key }}"
+    url: "{{ php_repo.sury.gpg }}"
     state: present
 
 - name: add php repository
   ansible.builtin.apt_repository:
-    repo: "{{ php_install__repo__sury__deb }}"
+    repo: "{{ php_repo.sury.deb }}"
     state: present
 
 - name: service facts
@@ -21,9 +21,9 @@
 
 - name: ensure php-fpm is stopped
   ansible.builtin.service:
-    name: "php{{ php_install__version }}-fpm"
+    name: "php{{ php.version }}-fpm"
     state: stopped
-  when: ansible_facts.services is search(php_install__version + '-fpm.service')
+  when: ansible_facts.services is search(php.version + '-fpm.service')
 
 - name: ensure apache2 is stopped
   ansible.builtin.service:
@@ -31,23 +31,23 @@
     state: stopped
   when: ansible_facts.services is search("apache2.service")
 
-- name: install php{{ php_install__version }}
+- name: install php{{ php.version }}
   ansible.builtin.apt:
-    name: "php{{ php_install__version }}"
+    name: "php{{ php.version }}"
     state: present
     update_cache: yes
   ignore_errors: yes  
 
-- name: install php{{ php_install__version }} packages
+- name: install php{{ php.version }} packages
   ansible.builtin.apt:
-    name: "php{{ php_install__version }}-{{ item }}"
+    name: "php{{ php.version }}-{{ item }}"
     state: present
     update_cache: yes
   ignore_errors: yes
-  with_items: "{{ php_install__list }}"
+  with_items: "{{ php_install.packages }}"
 
-- name: ensure php{{ php_install__version }}-fpm is started
+- name: ensure php{{ php.version }}-fpm is started
   ansible.builtin.service:
-    name: "php{{ php_install__version }}-fpm"
+    name: "php{{ php.version }}-fpm"
     state: started
     enabled: yes

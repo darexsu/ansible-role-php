@@ -15,22 +15,22 @@
     state: stopped
   when: ansible_facts.services is search("apache2.service")
 
-- name: install php{{ php_install__version }}.
+- name: install php{{ php.version }}.
   ansible.builtin.package:
     name: "php"
     state: present
-    enablerepo: "php:{{ php_install__version }}"
+    enablerepo: "php:{{ php.version }}"
     update_cache: true
   ignore_errors: true
 
-- name: install php{{ php_install__version }} modules.
+- name: install php{{ php.version }} modules.
   ansible.builtin.package:
     name: "php-{{ item }}"
     state: present
-    enablerepo: "php:{{ php_install__version }}"
+    enablerepo: "php:{{ php.version }}"
     update_cache: true
   ignore_errors: true
-  with_items: "{{ php_install__list }}"
+  with_items: "{{ php_install.packages }}"
 
 - name: ensure php-fpm is started
   ansible.builtin.service:

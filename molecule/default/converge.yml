@@ -1,35 +1,36 @@
 ---
 - name: Converge
   hosts: all
-  become: true
-
+  
   pre_tasks:
   - name: Unnessessary command
     ansible.builtin.shell:
       cmd: "{{ lookup('env', 'ANSIBLE_COMMAND') }}"
-    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0
-    
-  roles:
-    - role: darexsu.php
-      # - install
-      php_install: true
-      php_install__version: "7.4"
-      php_install__list: [common, fpm]
-      # - install  repo
-      php_install__repo: true
-      php_install__repo__sury: false
-      php_install__repo__ondrej: false
-      php_install__repo__remi: false
-      # - config
-      php_config: true
-      # - config  php.ini
-      php_config__php_ini: true
-      # - config  php_fpm
-      php_config__php_fpm: true
-      php_config__php_fpm__file: "my.conf"
-      # - config  php_fpm  unix socket
-      php_config__php_fpm__unix_socket: true
-      php_config__php_fpm__unix_socket__user: "www-data"
-      php_config__php_fpm__unix_socket__group: "www-data"     
-      # - config  php_fpm  remove file
-      php_config__php_fpm__remove_file: "www.conf"
+    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0     
+  
+  vars:
+    php_merge: 
+      php:
+        version: "7.4"     
+      php_repo:
+        enabled: true    
+      php_install:
+        enabled: true
+        packages: [bcmath, common, fpm]    
+      php_fpm: 
+        enabled: true
+        file: ["www.conf"]
+        state: "present"
+        vars:
+          unix_socket:
+            enabled: true
+            file: "php{{ php.version }}-fpm.sock"
+            user: "www-data"
+            group: "www-data"   
+      php_ini:
+        enabled: true
+
+  tasks:
+  - name: include role darexsu.php
+    include_role: 
+      name: darexsu.php

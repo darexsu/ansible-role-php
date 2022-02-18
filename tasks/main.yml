@@ -1,66 +1,85 @@
 ---
+- name: merge dictionaries
+  block:
+  - name: register default vars
+    include_vars:   
+      dir: "{{ role_path }}/defaults/"
+      name: php_default_vars    
+
+  - name: merge default and new dictionaries 
+    set_fact:
+      "{{ item.key }}": "{{ php_default_vars[item.key] | combine(php_merge[item.key], recursive=True)}}"
+    with_dict: "{{ php_merge }}"
+  when: php_merge is defined
+
 - name: include php install from distro
-  include_tasks: ./tasks/install/php_install__debian_distro.yml
+  include_tasks: ./tasks/install/php_install__debian.yml
   when: 
-    - php_install
+    - php_install.enabled
     - ansible_distribution == "Debian"
-    - (not php_install__repo or not php_install__repo__sury)
+    - (not php_repo.enabled or not php_repo.sury.enabled)
 
 - name: include php install from sury
   include_tasks: ./tasks/install/php_install__debian_sury.yml
   when: 
-    - php_install 
+    - php_install.enabled
     - ansible_distribution == "Debian" 
-    - php_install__repo
-    - php_install__repo__sury
+    - php_repo.enabled
+    - php_repo.sury.enabled
 
 - name: include php install from distro
-  include_tasks: ./tasks/install/php_install__ubuntu_distro.yml
+  include_tasks: ./tasks/install/php_install__ubuntu.yml
   when:
-    - php_install
+    - php_install.enabled
     - ansible_distribution == "Ubuntu"
-    - (not php_install__repo or not php_install__repo__ondrej)
+    - (not php_repo.enabled or not php_repo.ondrej.enabled)
 
 - name: include php install from andrej
   include_tasks: ./tasks/install/php_install__ubuntu_andrej.yml
   when:
-    - php_install
+    - php_install.enabled
     - ansible_distribution == "Ubuntu"
-    - php_install__repo
-    - php_install__repo__ondrej
+    - php_repo.enabled
+    - php_repo.ondrej.enabled
 
 - name: include php install from distro
-  include_tasks: ./tasks/install/php_install__redhat_distro.yml
+  include_tasks: ./tasks/install/php_install__redhat.yml
   when:
-    - php_install
+    - php_install.enabled
     - ansible_os_family == "RedHat"
-    - (not php_install__repo or not php_install__repo__remi)
+    - (not php_repo.enabled or not php_repo.remi.enabled)
 
 - name: include php install from remi
   include_tasks: ./tasks/install/php_install__redhat_remi.yml
   when:
-    - php_install
     - ansible_os_family == "RedHat"
-    - php_install__repo
-    - php_install__repo__remi
+    - php_install.enabled
+    - php_repo.enabled
+    - php_repo.remi.enabled
 
 - name: include php config
   include_tasks: ./tasks/config/php_config__debian.yml
   when:
-    - php_config
     - ansible_os_family == "Debian"
+    - (php_ini.enabled or php_fpm.enabled)
 
-- name: include php config remi
-  include_tasks: ./tasks/config/php_config__redhat_distro.yml
+- name: include php config
+  include_tasks: ./tasks/config/php_config__redhat.yml
   when:
-    - php_config
     - ansible_os_family == "RedHat"
-    - (not php_install__repo or not php_install__repo__remi)
+    - (php_ini.enabled or php_fpm.enabled)
+    - (not php_repo.enabled or not php_repo.remi.enabled)
 
 - name: include php config remi
   include_tasks: ./tasks/config/php_config__redhat_remi.yml
   when:
-    - php_config
     - ansible_os_family == "RedHat"
-    - php_install__repo
-    - php_install__repo__remi
+    - (php_ini.enabled or php_fpm.enabled)
+    - php_repo.enabled
+    - php_repo.remi.enabled
+
+- name: reset dictionaries to default
+  set_fact:
+    "{{ item.key }}": "{{ lookup('vars', item.key) | combine( item.value, recursive=True) }}"
+  with_dict: "{{ update_vars }}"
+  when: merge_dictionaries is defined
