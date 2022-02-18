@@ -2,11 +2,11 @@
 - name: update php.ini config from template
   template:
     src: "{{ php_ini.src }}"
-    dest: "{{ php_ini.path.remi}}{{ php_ini.file }}"
+    dest: "{{ php_ini.path.redhat}}{{ php_ini.file }}"
     owner: root
     group: root
     mode: 0644
-  notify: restart php-fpm redhat remi
+  notify: restart php-fpm redhat distro
   when: php_ini.enabled
 
 - name: ensure web-server user exsist
@@ -22,11 +22,11 @@
 
 - name: ensure directory and user exsist for unix socket
   block:
-    - name: ensure unix group exsist
+    - name: ensure web-server group exsist
       ansible.builtin.group:
         name: "{{ php_fpm.vars.unix_socket.group }}"
 
-    - name: ensure unix user exsist
+    - name: ensure web-server user exsist
       ansible.builtin.user:
         name: "{{ php_fpm.vars.unix_socket.user }}"
         group: "{{ php_fpm.vars.unix_socket.group }}"
@@ -34,17 +34,17 @@
 
 - name: remove config
   ansible.builtin.file:
-    path: "{{ php_fpm.path.remi }}{{ php_fpm.file }}"
+    path: "{{ php_fpm.path.redhat }}{{ php_fpm.file }}"
     state: absent  
-  notify: restart php-fpm redhat remi
+  notify: restart php-fpm redhat distro
   when: php_fpm.enabled and php_fpm.state == "absent"
 
 - name: add webserver config php-fpm-pool
   template:
     src: "{{ php_fpm.src }}"
-    dest: "{{ php_fpm.path.remi }}{{ php_fpm.file }}"
+    dest: "{{ php_fpm.path.redhat }}{{ php_fpm.file }}"
     owner: root
     group: root
     mode: 0644
-  notify: restart php-fpm redhat remi
+  notify: restart php-fpm redhat distro
   when: php_fpm.enabled and php_fpm.state == "present"

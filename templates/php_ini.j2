@@ -1,48 +1,8 @@
 [PHP]
 
-engine = {{ php_config__php_ini__engine }}
-short_open_tag = {{ php_config__php_ini__short_open_tag }}
-precision = {{ php_config__php_ini__precision }}
-output_buffering = {{ php_config__php_ini__output_buffering }}
-zlib.output_compression = {{ php_config__php_ini__zlib_output_compression }}
-implicit_flush = {{ php_config__php_ini__implicit_flush }}
-unserialize_callback_func = {{ php_config__php_ini__unserialize_callback_func }}
-serialize_precision = {{ php_config__php_ini__serialize_precision }}
-disable_functions = {{ php_config__php_ini__disable_functions }}
-disable_classes = {{ php_config__php_ini__disable_classes }}
-zend.enable_gc = {{ php_config__php_ini__zend_enable_gc }}
-zend.exception_ignore_args = {{ php_config__php_ini__zend_exception_ignore_args }}
-zend.exception_string_param_max_len = {{ php_config__php_ini__zend_exception_string_param_max_len }}
-expose_php = {{ php_config__php_ini__expose_php }}
-max_execution_time = {{ php_config__php_ini__max_execution_time }}
-max_input_time = {{ php_config__php_ini__max_input_time }}
-memory_limit = {{ php_config__php_ini__memory_limit }}
-error_reporting = {{ php_config__php_ini__error_reporting }}
-display_errors = {{ php_config__php_ini__display_errors }}
-display_startup_errors = {{ php_config__php_ini__display_startup_errors }}
-log_errors = {{ php_config__php_ini__log_errors }}
-log_errors_max_len = {{ php_config__php_ini__log_errors_max_len }}
-ignore_repeated_errors = {{ php_config__php_ini__ignore_repeated_errors }}
-ignore_repeated_source = {{ php_config__php_ini__ignore_repeated_source }}
-report_memleaks = {{ php_config__php_ini__report_memleaks }}
-variables_order = "{{ php_config__php_ini__variables_order }}"
-request_order = "{{ php_config__php_ini__request_order }}"
-register_argc_argv = {{ php_config__php_ini__register_argc_argv }}
-auto_globals_jit = {{ php_config__php_ini__auto_globals_jit }}
-post_max_size = {{ php_config__php_ini__post_max_size }}
-auto_prepend_file = {{ php_config__php_ini__auto_prepend_file }}
-auto_append_file = {{ php_config__php_ini__auto_append_file }}
-default_mimetype = "{{ php_config__php_ini__default_mimetype }}"
-default_charset = "{{ php_config__php_ini__default_charset }}"
-doc_root = {{ php_config__php_ini__doc_root }}
-user_dir = {{ php_config__php_ini__user_dir }}
-enable_dl = {{ php_config__php_ini__enable_dl }}
-file_uploads = {{ php_config__php_ini__file_uploads }}
-upload_max_filesize = {{ php_config__php_ini__upload_max_filesize }}
-max_file_uploads = {{ php_config__php_ini__max_file_uploads }}
-allow_url_fopen = {{ php_config__php_ini__allow_url_fopen }}
-allow_url_include = {{ php_config__php_ini__allow_url_include }}
-default_socket_timeout = {{ php_config__php_ini__default_socket_timeout }}
+{% for key, value in php_ini.vars.php.items() %}  
+{{ key }} = {{ value }}
+{% endfor %}
 
 [CLI Server]
 

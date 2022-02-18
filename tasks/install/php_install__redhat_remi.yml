@@ -4,9 +4,9 @@
 
 - name: ensure php-fpm is stopped
   ansible.builtin.service:
-    name: "php{{ php_install__version | replace('.','')}}-php-fpm"
+    name: "php{{ php.version | replace('.','')}}-php-fpm"
     state: stopped
-  when: ansible_facts.services is search(php_install__version | replace('.','') + '-php-fpm.service')
+  when: ansible_facts.services is search(php.version | replace('.','') + '-php-fpm.service')
   ignore_errors: true
 
 - name: ensure apache2 is stopped
@@ -17,43 +17,43 @@
 
 - name: import epel repo gpg key
   ansible.builtin.rpm_key:
-    key: "{{ php_install__repo__epel__gpg_key }}"
+    key: "{{ php_repo.epel.gpg }}"
     state: present
 
 - name: install epel repo
   ansible.builtin.package:
-    name: "{{ php_install__repo__epel__rpm }}"
+    name: "{{ php_repo.epel.rpm }}"
     state: present  
 
 - name: import remi repo gpg key
   ansible.builtin.rpm_key:
-    key: "{{ php_install__repo__remi__gpg_key }}"
+    key: "{{ php_repo.remi.gpg }}"
     state: present
 
 - name: install remi repo
   ansible.builtin.package:
-    name: "{{ php_install__repo__remi__rpm }}"
+    name: "{{ php_repo.remi.rpm }}"
     state: present
 
-- name: install php{{ php_install__version | replace('.','')}}.
+- name: install php{{ php.version | replace('.','')}}.
   ansible.builtin.package:
-    name: "php{{ php_install__version | replace('.','')}}"
+    name: "php{{ php.version | replace('.','')}}"
     state: present
-    enablerepo: "remi,remi-php{{ php_install__version | replace('.','')}}"
+    enablerepo: "remi,remi-php{{ php.version | replace('.','')}}"
     update_cache: true
   ignore_errors: true
 
-- name: install php{{ php_install__version }} modules.
+- name: install php{{ php.version }} modules.
   ansible.builtin.package:
-    name: "php{{ php_install__version | replace('.','')}}-php-{{ item }}"
+    name: "php{{ php.version | replace('.','')}}-php-{{ item }}"
     state: present
-    enablerepo: "remi,remi-php{{ php_install__version | replace('.','')}}"
+    enablerepo: "remi,remi-php{{ php.version | replace('.','')}}"
     update_cache: true
   ignore_errors: true
-  with_items: "{{ php_install__list }}"
+  with_items: "{{ php_install.packages}}"
 
-- name: ensure php{{ php_install__version | replace('.','')}}-php-fpm is started
+- name: ensure php{{ php.version | replace('.','')}}-php-fpm is started
   ansible.builtin.service:
-    name: "php{{ php_install__version | replace('.','')}}-php-fpm"
+    name: "php{{ php.version | replace('.','')}}-php-fpm"
     state: started
     enabled: yes
