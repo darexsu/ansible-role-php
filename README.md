@@ -32,10 +32,10 @@ ansible-galaxy install darexsu.php --force
 ```yaml
 ---
     vars:
-    dict:           # <-- Replace default dictionary
-      a: my value
-      b: my value
-      c: my value
+      dict:           # <-- Replace default dictionary
+        a: my value
+        b: my value
+        c: my value
 ```
 ### Role hash_behaviour: Merge with default dictionaries
 ```yaml
