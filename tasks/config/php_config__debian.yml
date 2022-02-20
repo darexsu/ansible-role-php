@@ -6,6 +6,7 @@
     owner: root
     group: root
     mode: 0644
+    backup: "{{ php_ini.backup }}"
   notify: restart php-fpm debian
   when: php_ini.enabled
 
@@ -39,6 +40,13 @@
   notify: restart php-fpm debian
   when: php_fpm.enabled and php_fpm.state == "absent"
 
+- name: remove default config
+  ansible.builtin.file:
+    path: "{{ php_fpm.path.debian }}www.conf"
+    state: absent  
+  notify: restart php-fpm debian
+  when: php_fpm.enabled and php_fpm.remove_default
+
 - name: add webserver config php-fpm-pool
   template:
     src: "{{ php_fpm.src }}"
@@ -46,5 +54,6 @@
     owner: root
     group: root
     mode: 0644
+    backup: "{{ php_fpm.backup }}"
   notify: restart php-fpm debian
   when: php_fpm.enabled and php_fpm.state == "present"

@@ -12,7 +12,7 @@ ansible-galaxy install darexsu.php --force
   - [full playbook](#full-playbook)  
     - install
       - [official repo](#example-playbook-from-official-repo)
-      - [third-Party repo](#example-playbook-from-third-party-repo)
+      - [third-party repo](#example-playbook-from-third-party-repo)
       - [php modules](#example-playbook-install-php-modules) 
     - config
       - [php.ini](#example-playbook-phpini)
@@ -28,26 +28,27 @@ ansible-galaxy install darexsu.php --force
 | RockyLinux 8     |  remi             |
 | OracleLinux 8    |  remi             |
 
-### Role hash_behaviour: Replace with defaults dictionaries
-```yaml
----
-    vars:
-      dict:           # <-- Replace default dictionary
-        a: my value
-        b: my value
-        c: my value
+Replace dictionary and Merge dictionary (with "hash_behaviour=replace" in ansible.cfg):
 ```
-### Role hash_behaviour: Merge with default dictionaries
-```yaml
----
-    vars:
-      php_merge:    # <-- Merge with default dictionary
-        dict:
-          a: my value
-          b: my value
-          c: my value
+[host_vars]           [host_vars]
+---                   ---
+  vars:                 vars:
+    dict:                 merge:  <-- # Enable Merge
+      a: "value"            dict: 
+      b: "value"              a: "value" 
+                              b: "value"
+```
+Role recursive merge:
+```
+[host_vars]     [current role]    [include_role]
+  
+  dict:          dict:              dict:
+    a: "1" -->     a: "1"    -->      a: "1"
+                   b: "2"    -->      b: "2"
+                                      c: "3"
+    
+```
 
-```
 ##### Full playbook
 ```yaml
 ---

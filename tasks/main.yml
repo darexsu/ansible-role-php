@@ -1,16 +1,24 @@
 ---
 - name: merge dictionaries
   block:
-  - name: register default vars
-    include_vars:   
-      dir: "{{ role_path }}/defaults/"
-      name: php_default_vars    
-
+  - include_vars: 
+      file: ../../darexsu.php/defaults/main.yml
+      name: php_default_vars
+  
   - name: merge default and new dictionaries 
     set_fact:
-      "{{ item.key }}": "{{ php_default_vars[item.key] | combine(php_merge[item.key], recursive=True)}}"
-    with_dict: "{{ php_merge }}"
-  when: php_merge is defined
+      "{{ item.key }}": "{{ php_default_vars[item.key] | combine(merge[item.key], recursive=True)}}"
+    when: php_default_vars[item.key] is defined
+    with_dict: "{{ merge }}"
+
+  - name: combine defaults vars with merge dictionary
+    set_fact:
+      merge: "{{ php_default_vars | combine(merge, recursive=True)}}"
+  when: merge is defined
+
+- name: php role is disabled
+  meta: end_play
+  when: not php.enabled
 
 - name: include php install from distro
   include_tasks: ./tasks/install/php_install__debian.yml

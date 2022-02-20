@@ -1,17 +1,18 @@
 --- 
-# global   
-#   ├── repo
+# global
 #   ├── install
 #   |    ├── packages
-#   |    └── dependencies   
+#   |    ├── repo
+#   |    └── dependencies
 #   └── config
-#        └── nginx.conf
-#        └── virtualhost.conf
-#              ├── tcp\ip socket 
-#              └── unix socket 
+#        └── php.ini
+#        └── php-fpm
+#              ├── tcp\ip socket
+#              └── unix socket
 
 # global
 php:
+  enabled: false
   version: "7.4"
 
 # global -> repo 
@@ -51,6 +52,7 @@ php_ini:
     debian: "/etc/php/{{ php.version }}/fpm/"
     redhat: "/etc/"
     remi: "/etc/opt/remi/php{{ php.version | replace('.','')}}/php-fpm.d/"
+  backup: false
   vars:
     php:
       engine: "On"
@@ -100,9 +102,11 @@ php_ini:
 # config -> php-fpm
 php_fpm: 
   enabled: false
-  file: ["www.conf"]
+  file: "www.conf"
   state: "present"
   src: "php_fpm.j2"
+  backup: false
+  remove_default: false  
   path:
     debian: "/etc/php/{{ php.version }}/fpm/pool.d/"
     redhat: "/etc/php-fpm.d/"
