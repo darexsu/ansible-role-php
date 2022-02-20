@@ -9,8 +9,9 @@
     when: lookup('env', 'ANSIBLE_COMMAND') | length > 0     
   
   vars:
-    php_merge: 
+    merge:
       php:
+        enabled: true
         version: "7.4"     
       php_repo:
         enabled: true    

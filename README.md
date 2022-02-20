@@ -56,7 +56,7 @@ Role recursive merge:
   become: true
 
   vars:
-    php_merge:
+    merge:
       php:
         version: "8.0"
       php_repo:
@@ -87,7 +87,7 @@ Role recursive merge:
   become: true
 
   vars:
-    php_merge:
+    merge:
       php:
         version: "7.4"
       php_install:
@@ -107,8 +107,9 @@ Role recursive merge:
   become: true
 
   vars:
-    php_merge:
+    merge:
       php:
+        enabled: true
         version: "8.0"
       php_repo:          # <-- enable third-party repo
         enabled: true
@@ -128,8 +129,9 @@ Role recursive merge:
   become: true
 
   vars:
-    php_merge:
+    merge:
       php:
+        enabled: true
         version: "7.4"
       php_repo:
         enabled: true
@@ -150,8 +152,9 @@ Role recursive merge:
   become: true
 
   vars:
-    php_merge:
+    merge:
       php:
+        enabled: true
         version: "7.4"
       php_repo:
         enabled: false     # <-- set "true", if php already installed from third-party
@@ -179,8 +182,9 @@ Role recursive merge:
   become: yes
 
   vars:
-    php_merge:
+    merge:
       php:
+        enabled: true
         version: "7.4"
       php_repo:
         enabled: false     # <-- set "true", if php already installed from third-party
@@ -215,8 +219,9 @@ Role recursive merge:
 
 
   vars:
-    php_merge:
+    merge:
       php:
+        enabled: true
         version: "7.4"
       php_repo:
         enabled: false     # <-- set "true", if php already installed from third-party
