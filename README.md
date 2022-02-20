@@ -58,6 +58,7 @@ Role recursive merge:
   vars:
     merge:
       php:
+        enabled: true
         version: "8.0"
       php_repo:
         enabled: true
@@ -89,6 +90,7 @@ Role recursive merge:
   vars:
     merge:
       php:
+        enabled: true
         version: "7.4"
       php_install:
         enabled: true
