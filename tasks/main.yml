@@ -85,9 +85,3 @@
     - (php_ini.enabled or php_fpm.enabled)
     - php_repo.enabled
     - php_repo.remi.enabled
-
-- name: reset dictionaries to default
-  set_fact:
-    "{{ item.key }}": "{{ lookup('vars', item.key) | combine( item.value, recursive=True) }}"
-  with_dict: "{{ update_vars }}"
-  when: merge_dictionaries is defined
