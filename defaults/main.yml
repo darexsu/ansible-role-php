@@ -1,5 +1,5 @@
 --- 
-# global
+# php
 #   ├── install
 #   |    ├── packages
 #   |    ├── repo
@@ -106,3 +106,40 @@ php_fpm:
         file: "php{{ php.version }}-fpm.sock"
         user: "www-data"
         group: "www-data"
+
+# ------ CONSTANTS --------
+php_vars:
+  RedHat:
+    distribution:
+      php_fpm_path: "/etc/php-fpm.d/"
+      php_ini_path: "/etc/"
+      service_name: "php"
+      modules_name: "php-"
+      enablerepo: "php:{{ php.version }}"
+      php_fpm_unix_socket_path: "/var/run/php-fpm/"
+    third_party:      
+      remi_repo: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+      remi_gpg: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
+      epel_repo: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+      epel_gpg: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+      php_ini_path: "/etc/opt/remi/php{{ php.version | replace('.','')}}/"
+      php_fpm_path: "/etc/opt/remi/php{{ php.version | replace('.','')}}/php-fpm.d/"
+      php_fpm_unix_socket_path: "/var/opt/remi/php{{ php.version | replace('.','')}}/run/php-fpm/"
+      service_name: "php{{ php.version | replace('.','') }}"
+      modules_name: "php{{ php.version | replace('.','')}}-php-"
+      enablerepo: "remi,remi-php{{ php.version | replace('.','')}}"
+  Debian:
+    distribution:
+      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
+      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
+      php_fpm_unix_socket_path: "/var/run/php/"
+      modules_name: "php{{ php.version }}-"
+    third_party:
+      sury_repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+      sury_gpg: "https://packages.sury.org/php/apt.gpg"
+      andrej_repo: "ppa:ondrej/php"
+      andrej_gpg: ""
+      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
+      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
+      php_fpm_unix_socket_path: "/var/run/php/"
+      modules_name: "php{{ php.version }}-"
