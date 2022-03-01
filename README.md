@@ -142,7 +142,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
       php:
         enabled: true
         version: "7.4"
-        src: "third_party" # <-- install from distro repo
+        src: "third_party" # <-- install from third-party repo
     # ---------------            install php
       php_install:
         enabled: true
