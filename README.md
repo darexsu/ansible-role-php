@@ -45,7 +45,6 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
                                       c: "3"
     
 ```
-
 ##### Full playbook
 ```yaml
 ---
@@ -263,8 +262,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
   tasks:
   - name: include role darexsu.php
     include_role: 
-      name: darexsu.php
-    
+      name: darexsu.php    
 
 ```
 ##### configure php-fpm unix socket
@@ -272,7 +270,6 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 ---
 - hosts: all
   become: yes
-
 
   vars:
     merge:
@@ -319,7 +316,6 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
-
 ```
 
 ##### add multiple configs
@@ -327,7 +323,6 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 ---
 - hosts: all
   become: yes
-
 
   vars:
     merge:              # <-- enable merge dictionary
