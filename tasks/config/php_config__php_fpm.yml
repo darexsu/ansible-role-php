@@ -39,4 +39,3 @@
       backup: "{{ php_fpm[item.key]['backup'] }}"
     notify: restart php-fpm
   when: php_fpm[item.key]['state'] == "present"
-
