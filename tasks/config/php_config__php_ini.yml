@@ -1,0 +1,10 @@
+---
+- name: update php.ini config from template
+  template:
+    src: "{{ php_ini.src }}"
+    dest: "{{ php_vars[ansible_os_family][php.src]['php_ini_path'] }}{{ php_ini.file }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: "{{ php_ini.backup }}"
+  notify: restart php-fpm

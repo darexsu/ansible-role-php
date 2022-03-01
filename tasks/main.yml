@@ -4,13 +4,13 @@
   - include_vars: 
       file: ../../darexsu.php/defaults/main.yml
       name: php_default_vars
-  
+
   - name: merge default and new dictionaries 
     set_fact:
       "{{ item.key }}": "{{ php_default_vars[item.key] | combine(merge[item.key], recursive=True)}}"
     when: php_default_vars[item.key] is defined
     with_dict: "{{ merge }}"
-
+  
   - name: combine defaults vars with merge dictionary
     set_fact:
       merge: "{{ php_default_vars | combine(merge, recursive=True)}}"
@@ -20,68 +20,15 @@
   meta: end_play
   when: not php.enabled
 
-- name: include php install from distro
-  include_tasks: ./tasks/install/php_install__debian.yml
-  when: 
-    - php_install.enabled
-    - ansible_distribution == "Debian"
-    - (not php_repo.enabled or not php_repo.sury.enabled)
+- name: include php install 
+  include_tasks: "./tasks/install/php_install__{{ ansible_os_family }}.yml"
+  when: php_install.enabled
 
-- name: include php install from sury
-  include_tasks: ./tasks/install/php_install__debian_sury.yml
-  when: 
-    - php_install.enabled
-    - ansible_distribution == "Debian" 
-    - php_repo.enabled
-    - php_repo.sury.enabled
+- name: include php.ini config
+  include_tasks: "./tasks/config/php_config__php_ini.yml"
+  when:  php_ini.enabled
 
-- name: include php install from distro
-  include_tasks: ./tasks/install/php_install__ubuntu.yml
-  when:
-    - php_install.enabled
-    - ansible_distribution == "Ubuntu"
-    - (not php_repo.enabled or not php_repo.ondrej.enabled)
-
-- name: include php install from andrej
-  include_tasks: ./tasks/install/php_install__ubuntu_andrej.yml
-  when:
-    - php_install.enabled
-    - ansible_distribution == "Ubuntu"
-    - php_repo.enabled
-    - php_repo.ondrej.enabled
-
-- name: include php install from distro
-  include_tasks: ./tasks/install/php_install__redhat.yml
-  when:
-    - php_install.enabled
-    - ansible_os_family == "RedHat"
-    - (not php_repo.enabled or not php_repo.remi.enabled)
-
-- name: include php install from remi
-  include_tasks: ./tasks/install/php_install__redhat_remi.yml
-  when:
-    - ansible_os_family == "RedHat"
-    - php_install.enabled
-    - php_repo.enabled
-    - php_repo.remi.enabled
-
-- name: include php config
-  include_tasks: ./tasks/config/php_config__debian.yml
-  when:
-    - ansible_os_family == "Debian"
-    - (php_ini.enabled or php_fpm.enabled)
-
-- name: include php config
-  include_tasks: ./tasks/config/php_config__redhat.yml
-  when:
-    - ansible_os_family == "RedHat"
-    - (php_ini.enabled or php_fpm.enabled)
-    - (not php_repo.enabled or not php_repo.remi.enabled)
-
-- name: include php config remi
-  include_tasks: ./tasks/config/php_config__redhat_remi.yml
-  when:
-    - ansible_os_family == "RedHat"
-    - (php_ini.enabled or php_fpm.enabled)
-    - php_repo.enabled
-    - php_repo.remi.enabled
+- name: include "php-fpm config"
+  include_tasks: "./tasks/config/php_config__php_fpm.yml"
+  when: php_fpm[item.key]['enabled']
+  with_dict: "{{ php_fpm }}"

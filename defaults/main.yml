@@ -10,48 +10,28 @@
 #              ├── tcp\ip socket
 #              └── unix socket
 
-# global
+# php
 php:
   enabled: false
   version: "7.4"
-
-# global -> repo 
-php_repo:
-  enabled: false
-  sury:
-    enabled: true
-    deb: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
-    gpg: "https://packages.sury.org/php/apt.gpg"
-  ondrej:
-    enabled: true
-    ppa: "ppa:ondrej/php"
-  epel:
-    enabled: true
-    rpm: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
-    gpg: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-  remi:
-    enabled: true
-    rpm: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
-    gpg: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
-
+  src: "distribution"
+php_service:
+  enabled: true    
+  state: "started"
 
 # install
 php_install:
   enabled: false
-  packages: [bcmath, common, fpm, cli, gd, ldap, curl, imap, xml, xmlrpc, mbstring, mysql, mcrypt, zip]
-  dependencies:
-    debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-    redhat: []
+  packages: [common, fpm]
+  dependencies_Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+  dependencies_RedHat: []
 
 # config -> php.ini
 php_ini:
   enabled: false
   file: "php.ini"
   src: "php_ini.j2"
-  path:
-    debian: "/etc/php/{{ php.version }}/fpm/"
-    redhat: "/etc/"
-    remi: "/etc/opt/remi/php{{ php.version | replace('.','')}}/php-fpm.d/"
+  path: "{{ php_vars[ansible_os_family][php.src]['php_ini_path'] }}"
   backup: false
   vars:
     php:
@@ -100,31 +80,28 @@ php_ini:
       default_socket_timeout: "60"
 
 # config -> php-fpm
-php_fpm: 
-  enabled: false
-  file: "www.conf"
-  state: "present"
-  src: "php_fpm.j2"
-  backup: false
-  remove_default: false  
-  path:
-    debian: "/etc/php/{{ php.version }}/fpm/pool.d/"
-    redhat: "/etc/php-fpm.d/"
-    remi: "/etc/opt/remi/php{{ php.version | replace('.','')}}/php-fpm.d/"
-  vars:
-    webserver_user: "www-data"
-    webserver_group: "www-data"
-    pm: "dynamic"
-    pm_max_children: "10"
-    pm_start_servers: "5"
-    pm_min_spare_servers: "5"
-    pm_max_spare_servers: "5"
-    pm_max_requests: "500"
-    tcp_ip_socket:
-      enabled: false
-      listen: "127.0.0.1:9000"
-    unix_socket:
-      enabled: false
-      file: "php{{ php.version }}-fpm.sock"
-      user: "www-data"
-      group: "www-data"
+php_fpm:
+  www_conf:
+    enabled: false
+    file: "www.conf"
+    state: "present"
+    src: "php_fpm.j2"
+    backup: false
+    path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+    vars:
+      webserver_user: "www-data"
+      webserver_group: "www-data"
+      pm: "dynamic"
+      pm_max_children: "10"
+      pm_start_servers: "5"
+      pm_min_spare_servers: "5"
+      pm_max_spare_servers: "5"
+      pm_max_requests: "500"
+      tcp_ip_socket:
+        enabled: false
+        listen: "127.0.0.1:9000"
+      unix_socket:
+        enabled: false
+        file: "php{{ php.version }}-fpm.sock"
+        user: "www-data"
+        group: "www-data"
