@@ -1,15 +1,5 @@
 ---
-- name: restart php-fpm debian
+- name: restart php-fpm
   service:
-    name: php{{ php.version }}-fpm
-    state: restarted
-
-- name: restart php-fpm redhat distro
-  service:
-    name: php-fpm
-    state: restarted
-
-- name: restart php-fpm redhat remi
-  service:
-    name: php{{ php.version | replace('.','')}}-php-fpm
+    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}fpm"
     state: restarted

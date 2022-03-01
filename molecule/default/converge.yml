@@ -1,6 +1,7 @@
 ---
 - name: Converge
   hosts: all
+  become: true
   
   pre_tasks:
   - name: Unnessessary command
@@ -10,26 +11,49 @@
   
   vars:
     merge:
+# PHP -----------------
       php:
         enabled: true
-        version: "7.4"     
-      php_repo:
-        enabled: true    
+        version: "7.4"
+        src: "third_party"
+    # install php
       php_install:
         enabled: true
-        packages: [bcmath, common, fpm]    
-      php_fpm: 
-        enabled: true
-        file: ["www.conf"]
-        state: "present"
-        vars:
-          unix_socket:
-            enabled: true
-            file: "php{{ php.version }}-fpm.sock"
-            user: "www-data"
-            group: "www-data"   
+        packages: [fpm]    
+    # configure php.ini
       php_ini:
-        enabled: true
+        enabled: true      
+    # php-fpm.conf  
+      php_fpm:
+    # delete default php-fpm.conf
+        www_conf:
+          enabled: true
+          state: "absent"
+    # add new php-fpm.conf
+        new_conf:
+          enabled: true
+          file: "new.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"
+            tcp_ip_socket:
+              enabled: false
+              listen: "127.0.0.1:9000"
+            unix_socket:
+              enabled: true
+              file: "php{{ php.version }}-fpm.sock"
+              user: "www-test"
+              group: "www-test"   
 
   tasks:
   - name: include role darexsu.php

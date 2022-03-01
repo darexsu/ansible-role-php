@@ -1,0 +1,63 @@
+---
+- name: ensure dependencies are installed.
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ php_install['dependencies_RedHat'] }}"
+
+- name: add repository
+  block:
+  - name: import epel repo gpg key
+    ansible.builtin.rpm_key:
+      key: "{{ php_vars[ansible_os_family][php.src]['epel_gpg'] }}"
+      state: present
+
+  - name: install epel repo
+    ansible.builtin.package:
+      name: "{{ php_vars[ansible_os_family][php.src]['epel_repo'] }}"
+      state: present  
+
+  - name: import remi repo gpg key
+    ansible.builtin.rpm_key:
+      key: "{{ php_vars[ansible_os_family][php.src]['remi_gpg'] }}"
+      state: present
+
+  - name: install remi repo
+    ansible.builtin.package:
+      name: "{{ php_vars[ansible_os_family][php.src]['remi_repo'] }}"
+      state: present
+  when: php.src == "third_party"
+
+- name: service facts
+  ansible.builtin.service_facts:
+
+- name: ensure php-fpm is stopped
+  ansible.builtin.service:
+    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}fpm"
+    state: stopped
+  when: ansible_facts.services is search(php_vars[ansible_os_family][php.src]['modules_name'])
+
+- name: install php
+  ansible.builtin.package:
+    name: "{{ php_vars[ansible_os_family][php.src]['service_name'] }}"
+    state: present
+    enablerepo: "{{ php_vars[ansible_os_family][php.src]['enablerepo'] }}"
+    update_cache: true
+  ignore_errors: true
+
+- name: install php modules.
+  ansible.builtin.package:
+    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}{{ item }}"
+    state: present
+    enablerepo: "{{ php_vars[ansible_os_family][php.src]['enablerepo'] }}"
+    update_cache: true
+  ignore_errors: true
+  with_items: "{{ php_install.packages}}"
+
+- name: "ensure php-fpm is {{ php_service.state }}"
+  ansible.builtin.service:
+    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}fpm"
+    state: "{{ php_service.state }}"
+    enabled: "{{ php_service.enabled }}"
+  ignore_errors: true

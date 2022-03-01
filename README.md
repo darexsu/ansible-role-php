@@ -1,6 +1,11 @@
-# Ansible role PHP 
+# Ansible role PHP 7.x, 8.x
 
 [![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)
+
+|  Testing         |  Debian            |  Ubuntu         |  Rocky Linux  | Oracle Linux |
+| :--------------: | :----------------: | :-------------: | :-----------: | :----------: |
+| Distro release   |  10, 11            | 18.04, 20.04    |  8            | 8            |
+| Third-party repo |  Sury              |   ppa:andrej    |  Remi         | Remi         |
 
 ### 1) Install role from Galaxy
 ```
@@ -11,35 +16,27 @@ ansible-galaxy install darexsu.php --force
   
   - [full playbook](#full-playbook)  
     - install
-      - [official repo](#example-playbook-from-official-repo)
-      - [third-party repo](#example-playbook-from-third-party-repo)
-      - [php modules](#example-playbook-install-php-modules) 
+      - [official repo](#install-from-official-repo)
+      - [third-party repo](#install-from-third-party-repo)
+      - [php modules](#install-php-modules) 
     - config
-      - [php.ini](#example-playbook-phpini)
-      - [php-fpm tcp/ip socket](#example-playbook-php-fpm-tcpip-socket)
-      - [php-fpm unix socket](#example-playbook-php-fpm-unix-socket)
+      - [php.ini](#configure-phpini)
+      - [php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket)
+      - [php-fpm unix socket](#configure-php-fpm-unix-socket)
+      - [add multiple configs ](#add-multiple-configs)
 
-|  Official repo   |  Third-Party repo |
-| ---------------- | ----------------- |
-| Debian 11        |  Sury             |
-| Debian 10        |  Sury             |
-| Ubuntu 20.04     |  ppa:andrej       |
-| Ubuntu 18.04     |  ppa:andrej       |
-| RockyLinux 8     |  remi             |
-| OracleLinux 8    |  remi             |
-
-Replace dictionary and Merge dictionary (with "hash_behaviour=replace" in ansible.cfg):
+Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 ```
+# Replace             # Merge
 [host_vars]           [host_vars]
 ---                   ---
   vars:                 vars:
-    dict:                 merge:  <-- # Enable Merge
+    dict:                 merge:
       a: "value"            dict: 
       b: "value"              a: "value" 
                               b: "value"
-```
-Role recursive merge:
-```
+
+# Role recursive merge:
 [host_vars]     [current role]    [include_role]
   
   dict:          dict:              dict:
@@ -56,24 +53,51 @@ Role recursive merge:
   become: true
 
   vars:
-    merge:
+    merge:              # <-- enable merge dictionary
+# PHP -----------------
       php:
         enabled: true
-        version: "8.0"
-      php_repo:
-        enabled: true
+        version: "7.4"
+        src: "third_party"
+    # -----------------       install php
       php_install:
         enabled: true
+        packages: [fpm]    
+    # -----------------       configure php.ini
       php_ini:
-        enabled: true
+        enabled: true      
+    # -----------------       php-fpm 
       php_fpm:
-        enabled: true
-        vars:    
-          unix_socket:
-            enabled: true
-            file: "php{{ php.version }}-fpm.sock"
-            user: "www-data"
-            group: "www-data"
+    # -----------------       delete default php-fpm.conf
+        www_conf:
+          enabled: true
+          state: "absent"
+    # -----------------       add new php-fpm.conf
+        new_conf:
+          enabled: true
+          file: "new.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"
+            tcp_ip_socket:
+              enabled: false
+              listen: "127.0.0.1:9000"
+    # -------------------    enable unix socket
+            unix_socket:
+              enabled: true
+              file: "php{{ php.version }}-fpm.sock"
+              user: "www-test"
+              group: "www-test"  
 
   tasks:
   - name: include role darexsu.php
@@ -81,19 +105,23 @@ Role recursive merge:
       name: darexsu.php  
 
 ```
-##### Example playbook: from official repo
+##### install from official repo
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
+    merge:                  # <-- enable merge dictionary
+# PHP ---------------
       php:
         enabled: true
         version: "7.4"
+        src: "distribution" # <-- install from distro repo
+    # ---------------             install php
       php_install:
         enabled: true
+        packages: [fpm]    
   
   tasks:
   - name: include role darexsu.php
@@ -102,21 +130,23 @@ Role recursive merge:
     
   
 ```
-##### Example playbook: from third-party repo
+##### install from third-party repo
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
+    merge:                 # <-- enable merge dictionary
+# PHP ---------------
       php:
         enabled: true
-        version: "8.0"
-      php_repo:          # <-- enable third-party repo
-        enabled: true
+        version: "7.4"
+        src: "third_party" # <-- install from distro repo
+    # ---------------            install php
       php_install:
         enabled: true
+        packages: [fpm]    
   
   tasks:
   - name: include role darexsu.php
@@ -124,22 +154,23 @@ Role recursive merge:
       name: darexsu.php   
   
 ```
-##### Example playbook: install php modules
+##### install php modules
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
+    merge:                 # <-- enable merge dictionary
+# PHP ---------------
       php:
         enabled: true
         version: "7.4"
-      php_repo:
-        enabled: true
+        src: "third_party" 
+    # ---------------            install php
       php_install:
         enabled: true
-        packages: [common, fpm] # <-- install custom modules
+        packages: [common, fpm, gd]    # <-- install custom modules
 
   tasks:
   - name: include role darexsu.php
@@ -147,21 +178,26 @@ Role recursive merge:
       name: darexsu.php
     
 ```
-##### Example playbook: php.ini
+##### configure php.ini
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
+    merge:              # <-- enable merge dictionary
+# PHP -----------------
       php:
         enabled: true
         version: "7.4"
-      php_repo:
-        enabled: false     # <-- set "true", if php already installed from third-party
-      php_ini:             # <-- setup php.ini
+        src: "third_party"
+    # -----------------       install php
+      php_install:
         enabled: true
+        packages: [fpm]    
+    # -----------------       configure php.ini
+      php_ini:
+        enabled: true   # <-- configure php.ini
         vars:
           php:
             engine: "On"
@@ -169,7 +205,7 @@ Role recursive merge:
             precision: "14"
             output_buffering: "4096"
             zlib_output_compression: "Off"
-            implicit_flush: "Off"
+          # ...
   
   tasks:
   - name: include role darexsu.php
@@ -177,34 +213,52 @@ Role recursive merge:
       name: darexsu.php
     
 ```
-##### Example playbook: php-fpm tcp/ip socket
+##### configure php-fpm tcp/ip socket
 ```yaml
 ---
 - hosts: all
   become: yes
 
   vars:
-    merge:
+    merge:              # <-- enable merge dictionary
+# PHP -----------------
       php:
         enabled: true
         version: "7.4"
-      php_repo:
-        enabled: false     # <-- set "true", if php already installed from third-party
-      php_fpm:             # <-- setup php-fpm
-        enabled: true
-        file: ["www.conf"]
-        vars:
-          webserver_user: "www-data"
-          webserver_group: "www-data"
-          pm: "dynamic"
-          pm_max_children: "10"
-          pm_start_servers: "5"
-          pm_min_spare_servers: "5"
-          pm_max_spare_servers: "5"
-          pm_max_requests: "500"
-          tcp_ip_socket:  # <-- setup php-fpm tcp/ip socket
-            enabled: true
-            listen: "127.0.0.1:9000"
+        src: "third_party"
+    # -----------------       php-fpm 
+      php_fpm:
+    # -----------------       delete default php-fpm.conf
+        www_conf:
+          enabled: true
+          state: "absent"
+    # -----------------       add new php-fpm.conf
+        new_conf:
+          enabled: true
+          file: "new.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"
+    # -------------------    enable tcp/ip socket        
+            tcp_ip_socket:
+              enabled: true
+              listen: "127.0.0.1:9000"
+    # -------------------    disable unix socket
+            unix_socket:
+              enabled: false
+              file: "php{{ php.version }}-fpm.sock"
+              user: "www-test"
+              group: "www-test"  
   
   tasks:
   - name: include role darexsu.php
@@ -213,7 +267,7 @@ Role recursive merge:
     
 
 ```
-##### Example playbook: php-fpm unix socket
+##### configure php-fpm unix socket
 ```yaml
 ---
 - hosts: all
@@ -222,28 +276,122 @@ Role recursive merge:
 
   vars:
     merge:
+# PHP -----------------
       php:
         enabled: true
         version: "7.4"
-      php_repo:
-        enabled: false     # <-- set "true", if php already installed from third-party
-      php_fpm: 
+        src: "third_party"
+    # -----------------       php-fpm 
+      php_fpm:
+    # -----------------       delete default php-fpm.conf
+        www_conf:
+          enabled: true
+          state: "absent"
+    # -----------------       add new php-fpm.conf
+        new_conf:
+          enabled: true
+          file: "new.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"
+    # -------------------    disable tcp/ip socket        
+            tcp_ip_socket:
+              enabled: false
+              listen: "127.0.0.1:9000"
+    # -------------------    enable unix socket
+            unix_socket:
+              enabled: true
+              file: "php{{ php.version }}-fpm.sock"
+              user: "www-test"
+              group: "www-test"  
+
+    tasks:
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
+
+```
+
+##### add multiple configs
+```yaml
+---
+- hosts: all
+  become: yes
+
+
+  vars:
+    merge:              # <-- enable merge dictionary
+# PHP -----------------
+      php:
         enabled: true
-        file: ["www.conf"]
-        vars:
-          webserver_user: "www-data"
-          webserver_group: "www-data"
-          pm: "dynamic"
-          pm_max_children: "10"
-          pm_start_servers: "5"
-          pm_min_spare_servers: "5"
-          pm_max_spare_servers: "5"
-          pm_max_requests: "500"
-          unix_socket:     # <-- setup php-fpm unix socket
-            enabled: true
-            file: "php{{ php.version }}-fpm.sock"
-            user: "www-data"
-            group: "www-data"
+        version: "7.4"
+        src: "third_party"
+    # -----------------       php-fpm 
+      php_fpm:
+    # -----------------       delete default php-fpm.conf
+        www_conf:
+          enabled: true
+          state: "absent"
+    # -----------------       add first.conf
+        first_conf:
+          enabled: true
+          file: "first.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"      
+            tcp_ip_socket:
+              enabled: false
+              listen: "127.0.0.1:9000"
+            unix_socket:
+              enabled: true
+              file: "php{{ php.version }}-first-fpm.sock"
+              user: "www-test"
+              group: "www-test"
+    # -----------------       add second.conf
+        second_conf:
+          enabled: true
+          file: "second.conf"
+          state: "present"
+          src: "php_fpm.j2"
+          backup: true
+          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          vars:
+            webserver_user: "www-data"
+            webserver_group: "www-data"
+            pm: "dynamic"
+            pm_max_children: "10"
+            pm_start_servers: "5"
+            pm_min_spare_servers: "5"
+            pm_max_spare_servers: "5"
+            pm_max_requests: "500"      
+            tcp_ip_socket:
+              enabled: false
+              listen: "127.0.0.1:9000"
+            unix_socket:
+              enabled: true
+              file: "php{{ php.version }}-second-fpm.sock"
+              user: "www-test"
+              group: "www-test"  
 
     tasks:
     - name: include role darexsu.php

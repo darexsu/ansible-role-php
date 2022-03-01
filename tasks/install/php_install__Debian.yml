@@ -1,0 +1,58 @@
+---
+- name: ensure dependencies are installed.
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ php_install['dependencies_Debian'] }}"
+
+- name: add repository debian
+  block: 
+  - name: add php repository gpg key
+    ansible.builtin.apt_key:
+      url: "{{ php_vars[ansible_os_family][php.src]['sury_gpg'] }}"
+      state: present
+
+  - name: add php repository
+    ansible.builtin.apt_repository:
+      repo: "{{ php_vars[ansible_os_family][php.src]['sury_repo'] }}"
+      state: present
+  when: php.src == "third_party" and not ansible_distribution == "Ubuntu"
+
+- name: add php repository
+  ansible.builtin.apt_repository:
+    repo: "{{ php_vars[ansible_os_family][php.src]['andrej_repo'] }}"
+    state: present
+  when: php.src == "third_party" and ansible_distribution == "Ubuntu"
+
+- name: service facts
+  ansible.builtin.service_facts:
+
+- name: ensure php-fpm is stopped
+  ansible.builtin.service:
+    name: "php{{ php.version }}-fpm"
+    state: stopped
+  when: ansible_facts.services is search(php.version + '-fpm.service')
+
+- name: install php
+  ansible.builtin.apt:
+    name: "php{{ php.version }}"
+    state: present
+    update_cache: true
+  ignore_errors: true  
+
+- name: install php packages
+  ansible.builtin.apt:
+    name: "php{{ php.version }}-{{ item }}"
+    state: present
+    update_cache: true
+  ignore_errors: true
+  with_items: "{{ php_install.packages }}"
+
+- name: "ensure php-fpm is {{ php_service.state }}"
+  ansible.builtin.service:
+    name: "php{{ php.version }}-fpm"
+    state: "{{ php_service.state }}"
+    enabled: "{{ php_service.enabled }}"
+  ignore_errors: true
+  when: ansible_facts.services is search(php.version + '-fpm.service')
