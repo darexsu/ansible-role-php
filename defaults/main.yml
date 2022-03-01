@@ -23,8 +23,9 @@ php_service:
 php_install:
   enabled: false
   packages: [common, fpm]
-  dependencies_Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-  dependencies_RedHat: []
+  dependencies:
+    Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+    RedHat: []
 
 # config -> php.ini
 php_ini:

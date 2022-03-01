@@ -4,7 +4,7 @@
     name: "{{ item }}"
     state: present
     update_cache: true
-  with_items: "{{ php_install['dependencies_Debian'] }}"
+  with_items: "{{ php_install['dependencies']['Debian'] }}"
 
 - name: add repository debian
   block: 
