@@ -78,7 +78,6 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
           state: "present"
           src: "php_fpm.j2"
           backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
@@ -237,8 +236,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
           file: "new.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          backup: true          
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
@@ -290,8 +288,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
           file: "new.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          backup: true         
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
@@ -343,8 +340,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
           file: "first.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          backup: true         
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
@@ -368,8 +364,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
           file: "second.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          backup: true         
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"

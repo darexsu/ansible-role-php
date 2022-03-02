@@ -34,8 +34,7 @@
           file: "new.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+          backup: true          
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
