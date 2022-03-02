@@ -1,7 +1,7 @@
 ---
 - name: update php.ini config from template
   template:
-    src: "{{ php_ini.src }}"
+    src: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
     dest: "{{ php_vars[ansible_os_family][php.src]['php_ini_path'] }}{{ php_ini.file }}"
     owner: root
     group: root

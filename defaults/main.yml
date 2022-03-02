@@ -31,8 +31,7 @@ php_install:
 php_ini:
   enabled: false
   file: "php.ini"
-  src: "php_ini.j2"
-  path: "{{ php_vars[ansible_os_family][php.src]['php_ini_path'] }}"
+  src: "php_ini.j2" 
   backup: false
   vars:
     php:
@@ -87,8 +86,7 @@ php_fpm:
     file: "www.conf"
     state: "present"
     src: "php_fpm.j2"
-    backup: false
-    path: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}"
+    backup: false    
     vars:
       webserver_user: "www-data"
       webserver_group: "www-data"
