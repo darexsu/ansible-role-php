@@ -15,20 +15,18 @@
         enabled: true
         version: "7.4"
         src: "third_party"
-    # install php
+    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  install
       php_install:
         enabled: true
         packages: [fpm]    
-    # configure php.ini
+    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.ini
       php_ini:
         enabled: true      
-    # php-fpm.conf  
+    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.fpm
       php_fpm:
-    # delete default php-fpm.conf
         www_conf:
           enabled: true
           state: "absent"
-    # add new php-fpm.conf
         new_conf:
           enabled: true
           file: "new.conf"

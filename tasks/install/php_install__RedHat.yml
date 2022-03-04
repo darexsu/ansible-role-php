@@ -61,4 +61,4 @@
     state: "{{ php['service']['state'] }}"
     enabled: "{{ php['service']['enabled'] }}"
   ignore_errors: true
-    when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])
+  when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])

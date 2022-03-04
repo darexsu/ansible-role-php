@@ -10,16 +10,16 @@
 #              ├── tcp\ip socket
 #              └── unix socket
 
-# PHP
+# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
 php:
   enabled: false
   version: "7.4"
   src: "distribution"
-  php_service:
+  service:
     enabled: true    
     state: "started"
 
-# PHP -> install
+# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  install
 php_install:
   enabled: false
   packages: [common, fpm]
@@ -27,7 +27,7 @@ php_install:
     Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
     RedHat: []
 
-# PHP -> config -> php.ini
+# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.ini
 php_ini:
   enabled: false
   file: "php.ini"
@@ -79,7 +79,7 @@ php_ini:
       allow_url_include: "Off"
       default_socket_timeout: "60"
 
-# PHP -> config -> php-fpm
+# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.fpm
 php_fpm:
   www_conf:
     enabled: false
@@ -105,7 +105,7 @@ php_fpm:
         user: "www-data"
         group: "www-data"
 
-# PHP -> constants
+# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ constants
 php_const:
   RedHat:
     distribution:
