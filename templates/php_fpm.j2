@@ -8,7 +8,7 @@ group = {{ php_fpm[item.key]['vars']['webserver_group'] }}
 {% endif %}
 
 {% if php_fpm[item.key]['vars']['unix_socket']['enabled'] %}
-listen = {{ php_vars[ansible_os_family][php.src]['php_fpm_unix_socket_path'] }}{{ php_fpm[item.key]['vars']['unix_socket']['file'] }}
+listen = {{ php_const[ansible_os_family][php.src]['php_fpm_unix_socket_path'] }}{{ php_fpm[item.key]['vars']['unix_socket']['file'] }}
 
 user = {{ php_fpm[item.key]['vars']['unix_socket']['user'] }}
 group = {{ php_fpm[item.key]['vars']['unix_socket']['group'] }}

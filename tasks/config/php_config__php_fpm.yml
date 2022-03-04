@@ -4,7 +4,7 @@
 
 - name: remove php-fpm config 
   ansible.builtin.file:
-    dest: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
+    dest: "{{ php_const[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
     state: absent  
   notify: restart php-fpm
   when: php_fpm[item.key]['state'] == "absent"
@@ -32,7 +32,7 @@
   - name: add php-fpm config 
     template:
       src: "{{ php_fpm[item.key]['src'] }}"
-      dest: "{{ php_vars[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
+      dest: "{{ php_const[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
       owner: root
       group: root
       mode: 0644

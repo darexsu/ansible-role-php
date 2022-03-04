@@ -10,18 +10,18 @@
   block: 
   - name: add php repository gpg key
     ansible.builtin.apt_key:
-      url: "{{ php_vars[ansible_os_family][php.src]['sury_gpg'] }}"
+      url: "{{ php_const[ansible_os_family][php.src]['sury_gpg'] }}"
       state: present
 
   - name: add php repository
     ansible.builtin.apt_repository:
-      repo: "{{ php_vars[ansible_os_family][php.src]['sury_repo'] }}"
+      repo: "{{ php_const[ansible_os_family][php.src]['sury_repo'] }}"
       state: present
   when: php.src == "third_party" and not ansible_distribution == "Ubuntu"
 
 - name: add php repository
   ansible.builtin.apt_repository:
-    repo: "{{ php_vars[ansible_os_family][php.src]['andrej_repo'] }}"
+    repo: "{{ php_const[ansible_os_family][php.src]['andrej_repo'] }}"
     state: present
   when: php.src == "third_party" and ansible_distribution == "Ubuntu"
 
@@ -32,7 +32,7 @@
   ansible.builtin.service:
     name: "php{{ php.version }}-fpm"
     state: stopped
-  when: ansible_facts.services is search(php.version + '-fpm.service')
+  when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])
 
 - name: install php
   ansible.builtin.apt:
@@ -49,10 +49,10 @@
   ignore_errors: true
   with_items: "{{ php_install.packages }}"
 
-- name: "ensure php-fpm is {{ php_service.state }}"
+- name: "ensure php-fpm is {{ php['service']['state'] }}"
   ansible.builtin.service:
     name: "php{{ php.version }}-fpm"
-    state: "{{ php_service.state }}"
-    enabled: "{{ php_service.enabled }}"
+    state: "{{ php['service']['state'] }}"
+    enabled: "{{ php['service']['enabled'] }}"
   ignore_errors: true
-  when: ansible_facts.services is search(php.version + '-fpm.service')
+  when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])

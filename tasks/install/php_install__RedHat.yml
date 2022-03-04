@@ -10,22 +10,22 @@
   block:
   - name: import epel repo gpg key
     ansible.builtin.rpm_key:
-      key: "{{ php_vars[ansible_os_family][php.src]['epel_gpg'] }}"
+      key: "{{ php_const[ansible_os_family][php.src]['epel_gpg'] }}"
       state: present
 
   - name: install epel repo
     ansible.builtin.package:
-      name: "{{ php_vars[ansible_os_family][php.src]['epel_repo'] }}"
+      name: "{{ php_const[ansible_os_family][php.src]['epel_repo'] }}"
       state: present  
 
   - name: import remi repo gpg key
     ansible.builtin.rpm_key:
-      key: "{{ php_vars[ansible_os_family][php.src]['remi_gpg'] }}"
+      key: "{{ php_const[ansible_os_family][php.src]['remi_gpg'] }}"
       state: present
 
   - name: install remi repo
     ansible.builtin.package:
-      name: "{{ php_vars[ansible_os_family][php.src]['remi_repo'] }}"
+      name: "{{ php_const[ansible_os_family][php.src]['remi_repo'] }}"
       state: present
   when: php.src == "third_party"
 
@@ -34,30 +34,31 @@
 
 - name: ensure php-fpm is stopped
   ansible.builtin.service:
-    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}fpm"
+    name: "{{ php_const[ansible_os_family][php.src]['modules_name'] }}fpm"
     state: stopped
-  when: ansible_facts.services is search(php_vars[ansible_os_family][php.src]['modules_name'])
+  when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])
 
 - name: install php
   ansible.builtin.package:
-    name: "{{ php_vars[ansible_os_family][php.src]['service_name'] }}"
+    name: "{{ php_const[ansible_os_family][php.src]['service_name'] }}"
     state: present
-    enablerepo: "{{ php_vars[ansible_os_family][php.src]['enablerepo'] }}"
+    enablerepo: "{{ php_const[ansible_os_family][php.src]['enablerepo'] }}"
     update_cache: true
   ignore_errors: true
 
 - name: install php modules.
   ansible.builtin.package:
-    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}{{ item }}"
+    name: "{{ php_const[ansible_os_family][php.src]['modules_name'] }}{{ item }}"
     state: present
-    enablerepo: "{{ php_vars[ansible_os_family][php.src]['enablerepo'] }}"
+    enablerepo: "{{ php_const[ansible_os_family][php.src]['enablerepo'] }}"
     update_cache: true
   ignore_errors: true
   with_items: "{{ php_install.packages}}"
 
-- name: "ensure php-fpm is {{ php_service.state }}"
+- name: "ensure php-fpm is {{ php['service']['state'] }}"
   ansible.builtin.service:
-    name: "{{ php_vars[ansible_os_family][php.src]['modules_name'] }}fpm"
-    state: "{{ php_service.state }}"
-    enabled: "{{ php_service.enabled }}"
+    name: "{{ php_const[ansible_os_family][php.src]['modules_name'] }}fpm"
+    state: "{{ php['service']['state'] }}"
+    enabled: "{{ php['service']['enabled'] }}"
   ignore_errors: true
+    when: ansible_facts.services is search(php_const[ansible_os_family][php.src]['modules_name'])
