@@ -1,0 +1,19 @@
+---
+extends: default
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  line-length: disable
+  truthy: disable
+  new-line-at-end-of-file: disable
+  colons: disable
+  comments-indentation: disable
+
+ignore: |
+  .tox/
+  .cache/

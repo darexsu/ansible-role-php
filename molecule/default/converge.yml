@@ -1,38 +1,40 @@
 ---
 - name: Converge
   hosts: all
-  
+
   pre_tasks:
   - name: Unnessessary command
     ansible.builtin.shell:
       cmd: "{{ lookup('env', 'ANSIBLE_COMMAND') }}"
-    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0     
-  
+    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0
+
   vars:
     merge:
-# PHP -----------------
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  install
+      # PHP -> install
       php_install:
         enabled: true
-        packages: [fpm]    
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.ini
+        packages: [fpm]
+      # PHP -> config -> php.ini
       php_ini:
-        enabled: true      
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.fpm
+        enabled: true
+      # PHP -> config -> php.fpm pool
       php_fpm:
+      # PHP -> config -> php-fpm pool -> delete www.conf
         www_conf:
           enabled: true
           state: "absent"
+      # PHP -> config -> php.fpm pool -> add new.conf
         new_conf:
           enabled: true
           file: "new.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true          
+          backup: true
           vars:
             webserver_user: "www-data"
             webserver_group: "www-data"
@@ -49,9 +51,9 @@
               enabled: true
               file: "php{{ php.version }}-fpm.sock"
               user: "www-test"
-              group: "www-test"   
+              group: "www-test"
 
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php
+    - name: include role darexsu.php
+      include_role:
+        name: darexsu.php

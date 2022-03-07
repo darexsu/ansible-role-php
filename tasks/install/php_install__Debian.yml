@@ -7,23 +7,23 @@
   with_items: "{{ php_install['dependencies']['Debian'] }}"
 
 - name: add repository debian
-  block: 
-  - name: add php repository gpg key
-    ansible.builtin.apt_key:
-      url: "{{ php_const[ansible_os_family][php.src]['sury_gpg'] }}"
-      state: present
+  block:
+    - name: add php repository gpg key
+      ansible.builtin.apt_key:
+        url: "{{ php_const[ansible_os_family][php.src]['sury_gpg'] }}"
+        state: present
 
-  - name: add php repository
-    ansible.builtin.apt_repository:
-      repo: "{{ php_const[ansible_os_family][php.src]['sury_repo'] }}"
-      state: present
-  when: php.src == "third_party" and not ansible_distribution == "Ubuntu"
+    - name: add php repository
+      ansible.builtin.apt_repository:
+        repo: "{{ php_const[ansible_os_family][php.src]['sury_repo'] }}"
+        state: present
+      when: php.src == "third_party" and not ansible_distribution == "Ubuntu"
 
-- name: add php repository
-  ansible.builtin.apt_repository:
-    repo: "{{ php_const[ansible_os_family][php.src]['andrej_repo'] }}"
-    state: present
-  when: php.src == "third_party" and ansible_distribution == "Ubuntu"
+    - name: add php repository
+      ansible.builtin.apt_repository:
+        repo: "{{ php_const[ansible_os_family][php.src]['andrej_repo'] }}"
+        state: present
+      when: php.src == "third_party" and ansible_distribution == "Ubuntu"
 
 - name: service facts
   ansible.builtin.service_facts:
@@ -39,7 +39,7 @@
     name: "php{{ php.version }}"
     state: present
     update_cache: true
-  ignore_errors: true  
+  ignore_errors: true
 
 - name: install php packages
   ansible.builtin.apt:

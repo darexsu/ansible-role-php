@@ -25,10 +25,9 @@ ansible-galaxy install darexsu.php --force
       - [php-fpm unix socket](#configure-php-fpm-unix-socket)
       - [add multiple configs ](#add-multiple-configs)
 
-Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
+Replace or Merge dictionaries (with "hash_behaviour=replace" in ansible.cfg):
 ```
 # Replace             # Merge
-[host_vars]           [host_vars]
 ---                   ---
   vars:                 vars:
     dict:                 merge:
@@ -36,8 +35,8 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
       b: "value"              a: "value" 
                               b: "value"
 
-# Role recursive merge:
-[host_vars]     [current role]    [include_role]
+# How does merge work?:
+Your vars [host_vars]  -->  defaults vars [current role] --> defaults vars [include role]
   
   dict:          dict:              dict:
     a: "1" -->     a: "1"    -->      a: "1"
@@ -53,23 +52,25 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-      # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  install
+      # PHP -> install
       php_install:
         enabled: true
         packages: [fpm]    
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.ini
+      # PHP -> config -> php.ini
       php_ini:
         enabled: true      
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php-fpm 
+      # PHP -> config -> php-fpm pool
       php_fpm:
+      # PHP -> config -> php-fpm pool -> delete www.conf
         www_conf:
           enabled: true
           state: "absent"
+      # PHP -> config -> php.fpm pool -> add new.conf
         new_conf:
           enabled: true
           file: "new.conf"
@@ -85,7 +86,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
             pm_min_spare_servers: "5"
             pm_max_spare_servers: "5"
             pm_max_requests: "500"
-          # ┌┄┄┄┄┄┄┄┄┄  enable unix socket
+      # PHP -> config -> php.fpm pool -> new.conf -> enable unix-socket
             unix_socket:
               enabled: true
               file: "php{{ php.version }}-fpm.sock"
@@ -106,12 +107,12 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
+      # PHP -> enable distribution repo
         src: "distribution" 
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄   install php
       php_install:
         enabled: true
         packages: [fpm]    
@@ -119,8 +120,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
   tasks:
   - name: include role darexsu.php
     include_role: 
-      name: darexsu.php
-    
+      name: darexsu.php    
   
 ```
 ##### install from third-party repo
@@ -131,12 +131,12 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
-        src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄   install php
+      # PHP -> enable third-party repo
+        src: "third_party"      
       php_install:
         enabled: true
         packages: [fpm]    
@@ -155,14 +155,15 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
-        src: "third_party" 
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄   install php
+        src: "third_party"
+      # PHP -> install
       php_install:
         enabled: true
+      # PHP -> install -> install custom modules
         packages: [common, fpm, gd]
 
   tasks:
@@ -179,16 +180,16 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄   install php
+      # PHP -> install
       php_install:
         enabled: true
         packages: [fpm]    
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  configure php.ini
+      # PHP -> config -> php.ini
       php_ini:
         enabled: true
         vars:
@@ -214,12 +215,12 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config  php-fpm 
+      # PHP -> config -> php-fpm pool
       php_fpm:
         www_conf:
           enabled: true
@@ -239,11 +240,11 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
             pm_min_spare_servers: "5"
             pm_max_spare_servers: "5"
             pm_max_requests: "500"
-          # ┌┄┄┄┄┄┄┄┄   enable tcp/ip socket        
+      # PHP -> config -> php-fpm pool -> enable tcp/ip socket   
             tcp_ip_socket:
               enabled: true
               listen: "127.0.0.1:9000"
-          # ┌┄┄┄┄┄┄┄┄   disable unix socket
+      # PHP -> config -> php-fpm pool -> disable unix socket
             unix_socket:
               enabled: false
               file: "php{{ php.version }}-fpm.sock"
@@ -264,12 +265,12 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php-fpm 
+      # PHP -> config -> php-fpm pool
       php_fpm:
         www_conf:
           enabled: true
@@ -289,11 +290,11 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
             pm_min_spare_servers: "5"
             pm_max_spare_servers: "5"
             pm_max_requests: "500"
-          # ┌┄┄┄┄┄┄┄┄┄┄ disable tcp/ip socket        
+      # PHP -> config -> php-fpm pool -> disable tcp/ip socket       
             tcp_ip_socket:
               enabled: false
               listen: "127.0.0.1:9000"
-          # ┌┄┄┄┄┄┄┄┄┄┄ enable unix socket
+      # PHP -> config -> php-fpm pool -> enable unix socket
             unix_socket:
               enabled: true
               file: "php{{ php.version }}-fpm.sock"
@@ -314,16 +315,18 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
 
   vars:
     merge:
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+      # PHP
       php:
         enabled: true
         version: "7.4"
         src: "third_party"
-    # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  config php-fpm 
+      # PHP -> config -> php-fpm pool
       php_fpm:
+      # PHP -> config -> php.fpm pool -> delete www.conf  
         www_conf:
           enabled: true
           state: "absent"
+      # PHP -> config -> php.fpm pool -> add new.conf
         first_conf:
           enabled: true
           file: "first.conf"
@@ -347,7 +350,7 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
               file: "php{{ php.version }}-first-fpm.sock"
               user: "www-test"
               group: "www-test"
-      # ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ add second.conf
+      # PHP -> config -> php.fpm pool -> add second.conf
         second_conf:
           enabled: true
           file: "second.conf"
@@ -376,5 +379,4 @@ Role behaviour: Replace or Merge (with "hash_behaviour=replace" in ansible.cfg):
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
-
 ```

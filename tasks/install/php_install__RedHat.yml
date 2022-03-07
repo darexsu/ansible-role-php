@@ -8,25 +8,25 @@
 
 - name: add repository
   block:
-  - name: import epel repo gpg key
-    ansible.builtin.rpm_key:
-      key: "{{ php_const[ansible_os_family][php.src]['epel_gpg'] }}"
-      state: present
+    - name: import epel repo gpg key
+      ansible.builtin.rpm_key:
+        key: "{{ php_const[ansible_os_family][php.src]['epel_gpg'] }}"
+        state: present
 
-  - name: install epel repo
-    ansible.builtin.package:
-      name: "{{ php_const[ansible_os_family][php.src]['epel_repo'] }}"
-      state: present  
+    - name: install epel repo
+      ansible.builtin.package:
+        name: "{{ php_const[ansible_os_family][php.src]['epel_repo'] }}"
+        state: present
 
-  - name: import remi repo gpg key
-    ansible.builtin.rpm_key:
-      key: "{{ php_const[ansible_os_family][php.src]['remi_gpg'] }}"
-      state: present
+    - name: import remi repo gpg key
+      ansible.builtin.rpm_key:
+        key: "{{ php_const[ansible_os_family][php.src]['remi_gpg'] }}"
+        state: present
 
-  - name: install remi repo
-    ansible.builtin.package:
-      name: "{{ php_const[ansible_os_family][php.src]['remi_repo'] }}"
-      state: present
+    - name: install remi repo
+      ansible.builtin.package:
+        name: "{{ php_const[ansible_os_family][php.src]['remi_repo'] }}"
+        state: present
   when: php.src == "third_party"
 
 - name: service facts

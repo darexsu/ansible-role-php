@@ -1,5 +1,5 @@
---- 
-# php
+---
+# PHP
 #   ├── install
 #   |    ├── packages
 #   |    ├── repo
@@ -10,16 +10,16 @@
 #              ├── tcp\ip socket
 #              └── unix socket
 
-# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ PHP ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+# PHP
 php:
   enabled: false
   version: "7.4"
   src: "distribution"
   service:
-    enabled: true    
+    enabled: true
     state: "started"
 
-# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  install
+# PHP -> install
 php_install:
   enabled: false
   packages: [common, fpm]
@@ -27,11 +27,11 @@ php_install:
     Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
     RedHat: []
 
-# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.ini
+# PHP -> config -> php.ini
 php_ini:
   enabled: false
   file: "php.ini"
-  src: "php_ini.j2" 
+  src: "php_ini.j2"
   backup: false
   vars:
     php:
@@ -79,14 +79,14 @@ php_ini:
       allow_url_include: "Off"
       default_socket_timeout: "60"
 
-# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ config php.fpm
+# PHP -> config -> php.fpm
 php_fpm:
   www_conf:
     enabled: false
     file: "www.conf"
     state: "present"
     src: "php_fpm.j2"
-    backup: false    
+    backup: false
     vars:
       webserver_user: "www-data"
       webserver_group: "www-data"
@@ -105,7 +105,7 @@ php_fpm:
         user: "www-data"
         group: "www-data"
 
-# ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄ constants
+# PHP -> constants
 php_const:
   RedHat:
     distribution:
@@ -115,7 +115,7 @@ php_const:
       modules_name: "php-"
       enablerepo: "php:{{ php.version }}"
       php_fpm_unix_socket_path: "/var/run/php-fpm/"
-    third_party:      
+    third_party:
       remi_repo: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
       remi_gpg: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
       epel_repo: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
