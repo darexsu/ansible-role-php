@@ -2,10 +2,14 @@
 
 [![CI Molecule](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-php/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)
 
-|  Testing         |  Debian            |  Ubuntu         |  Rocky Linux  | Oracle Linux |
-| :--------------: | :----------------: | :-------------: | :-----------: | :----------: |
-| Distro release   |  10, 11            | 18.04, 20.04    |  8            | 8            |
-| Third-party repo |  Sury              |   ppa:andrej    |  Remi         | Remi         |
+|  Testing         |  Official repo     |  Third-party repo |
+| :--------------: | :----------------: | :-------------:   |
+| Debian 11        |  PHP 7.4           |    Sury           |
+| Debian 10        |  PHP 7.3           |    Sury           |
+| Ubuntu 20.04     |  PHP 7.4           |    ppa:andrej     |
+| Ubuntu 18.04     |  PHP 7.2           |    ppa:andrej     |
+| Oracle Linux 8   |  PHP 7.2-7.4       |    Remi           |
+| Rocky Linux 8    |  PHP 7.2-7.4       |    Remi           |
 
 ### 1) Install role from Galaxy
 ```
