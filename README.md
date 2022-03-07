@@ -36,7 +36,7 @@ Replace or Merge dictionaries (with "hash_behaviour=replace" in ansible.cfg):
                               b: "value"
 
 # How does merge work?:
-Your vars [host_vars]  -->  defaults vars [current role] --> defaults vars [include role]
+Your vars [host_vars]  -->  default vars [current role] --> default vars [include role]
   
   dict:          dict:              dict:
     a: "1" -->     a: "1"    -->      a: "1"
