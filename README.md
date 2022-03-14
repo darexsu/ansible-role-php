@@ -107,7 +107,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
             pm_max_spare_servers: "5"
             pm_max_requests: "500"
             unix_socket:
-              enabled: false
+              enabled: true
               file: "php{{ php.version }}-fpm.sock"
               user: "www-data"
               group: "www-data"
@@ -486,7 +486,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               enabled: false
               listen: "127.0.0.1:9000"
             unix_socket:
-              enabled: false
+              enabled: true
               file: "php{{ php.version }}-fpm.sock"
               user: "www-data"
               group: "www-data"
