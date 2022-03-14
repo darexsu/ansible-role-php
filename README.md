@@ -113,9 +113,9 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               group: "www-data"
 
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php  
+    - name: include role darexsu.php
+      include_role:
+        name: darexsu.php
 
 ```
 ##### install: PHP from official repo (short version)
@@ -135,12 +135,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php_install:
         enabled: true
         packages: [common, fpm]
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php    
-  
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### install: PHP from third-party repo (short version)
 ```yaml
@@ -160,12 +159,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php_install:
         enabled: true
         packages: [common, fpm]
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php   
-  
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### install: php modules (short version)
 ```yaml
@@ -187,10 +185,9 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         packages: [common, fpm, gd]
 
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php
-    
+    - name: include role darexsu.php
+      include_role:
+        name: darexsu.php
 ```
 ##### configure: php.ini (short version)
 ```yaml
@@ -217,12 +214,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
             zlib_output_compression: "Off"
             implicit_flush: "Off"
        #    ...
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php
-    
+    - name: include role darexsu.php
+      include_role:
+        name: darexsu.php
 ```
 ##### configure: php-fpm tcpip-socket (short version)
 ```yaml
@@ -264,12 +260,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               file: "php{{ php.version }}-fpm.sock"
               user: "www-data"
               group: "www-data"  
-  
-  tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php    
 
+  tasks:
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### configure: php-fpm unix-socket (short version)
 ```yaml
@@ -312,7 +307,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               user: "www-data"
               group: "www-data"  
 
-    tasks:
+  tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
@@ -386,7 +381,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               user: "www-data"
               group: "www-data"  
 
-    tasks:
+  tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
@@ -492,10 +487,9 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               group: "www-data"
 
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php  
-
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### install: PHP from official repo (full version)
 ```yaml
@@ -520,12 +514,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
           RedHat: []
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php    
-  
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### install: PHP from third-party repo (full version)
 ```yaml
@@ -550,12 +543,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
           RedHat: []
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php   
-  
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### install: php modules (full version)
 ```yaml
@@ -583,10 +575,9 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           RedHat: []
 
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php
-    
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php 
 ```
 ##### configure: php.ini (full version)
 ```yaml
@@ -655,12 +646,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
             allow_url_fopen: "On"
             allow_url_include: "Off"
             default_socket_timeout: "60"
-  
+
   tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php
-    
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### configure: php-fpm tcpip-socket (full version)
 ```yaml
@@ -702,12 +692,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               file: "php{{ php.version }}-fpm.sock"
               user: "www-data"
               group: "www-data"  
-  
-  tasks:
-  - name: include role darexsu.php
-    include_role: 
-      name: darexsu.php    
 
+  tasks:
+    - name: include role darexsu.php
+      include_role: 
+        name: darexsu.php
 ```
 ##### configure: php-fpm unix-socket (full version)
 ```yaml
@@ -750,7 +739,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               user: "www-data"
               group: "www-data"  
 
-    tasks:
+  tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
@@ -824,7 +813,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
               user: "www-data"
               group: "www-data"  
 
-    tasks:
+  tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
