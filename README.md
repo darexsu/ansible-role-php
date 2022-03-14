@@ -14,7 +14,7 @@
           - [configure: php.ini](#configure-phpini-short-version)
           - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-short-version)
           - [configure: php-fpm unix socket](#configure-php-fpm-unix-socket-short-version)
-          - [configure: add multiple configs ](#add-multiple-configs-short-version)
+          - [configure: add multiple configs ](#configure-add-multiple-configs-short-version)
   - Playbooks (full version):
       - [install and configure: PHP](#install-and-configure-php-full-version)
           - [install: PHP from official repo](#install-php-from-official-repo-full-version)
@@ -23,7 +23,7 @@
           - [configure: php.ini](#configure-phpini-full-version)
           - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-full-version)
           - [configure: php-fpm unix socket](#configure-php-fpm-unix-socket-full-version)
-          - [configure: add multiple configs ](#add-multiple-configs-full-version)
+          - [configure: add multiple configs ](#configure-add-multiple-configs-full-version)
 
 ### Platforms
 
