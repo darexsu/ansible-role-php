@@ -9,7 +9,7 @@
   - Playbooks (merge version):
       - [install and configure: PHP](#install-and-configure-php-merge-version)
           - [install: PHP, repository: distribution](#install-php-repository-distribution-merge-version)
-          - [install: PHP, repository: third_party](#install-php-repository-third_party-merge-version)
+          - [install: PHP, repository: third_party](#install-php-repository-third-party-merge-version)
           - [install: PHP modules](#install-php-modules-merge-version)
           - [configure: php.ini](#configure-phpini-merge-version)
           - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-merge-version)
@@ -18,7 +18,7 @@
   - Playbooks (full version):
       - [install and configure: PHP](#install-and-configure-php-full-version)
           - [install: PHP, repository: distribution](#install-php-repository-distribution-full-version)
-          - [install: PHP, repository: third_party](#install-php-repository-third_party-full-version)
+          - [install: PHP, repository: third_party](#install-php-repository-third-party-full-version)
           - [install: PHP modules](#install-php-modules-full-version)
           - [configure: php.ini](#configure-phpini-full-version)
           - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-full-version)
