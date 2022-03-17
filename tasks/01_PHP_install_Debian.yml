@@ -13,13 +13,13 @@
         url: "{{ php_const[ansible_os_family][php.repo]['sury_gpg'] }}"
         state: present
 
-    - name: add php repository
+    - name: add php repository Debian
       ansible.builtin.apt_repository:
         repo: "{{ php_const[ansible_os_family][php.repo]['sury_repo'] }}"
         state: present
       when: not ansible_distribution == "Ubuntu"
 
-    - name: add php repository
+    - name: add php repository Ubuntu
       ansible.builtin.apt_repository:
         repo: "{{ php_const[ansible_os_family][php.repo]['andrej_repo'] }}"
         state: present
