@@ -5,7 +5,7 @@
   - Role:
       - [platforms](#platforms)
       - [install](#install)
-      - [Merge behaviour](#behaviour)
+      - [Merge behaviour](#merge-behaviour)
   - Playbooks (merge version):
       - [install and configure: PHP](#install-and-configure-php-merge-version)
           - [install: PHP, repository: distribution](#install-php-repository-distribution-merge-version)
@@ -141,7 +141,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role: 
         name: darexsu.php
 ```
-##### install: PHP, repository: third-party (merge version)
+##### install: PHP, repository: third_party (merge version)
 ```yaml
 ---
 - hosts: all
