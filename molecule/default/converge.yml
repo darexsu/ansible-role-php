@@ -15,28 +15,80 @@
       php:
         enabled: true
         version: "7.4"
-        src: "third_party"
+        repo: "third_party"
+        service:
+          enabled: true
+          state: "started"
+
       # PHP -> install
       php_install:
         enabled: true
-        packages: [fpm]
+        packages: [common, fpm]
+        dependencies:
+          Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+          RedHat: []
+
       # PHP -> config -> php.ini
       php_ini:
         enabled: true
-      # PHP -> config -> php.fpm pool
+        file: "php.ini"
+        src: "php_ini.j2"
+        backup: false
+        data:
+          php:
+            engine: "On"
+            short_open_tag: "Off"
+            precision: "14"
+            output_buffering: "4096"
+            zlib_output_compression: "Off"
+            implicit_flush: "Off"
+            unserialize_callback_func: ""
+            serialize_precision: "-1"
+            disable_functions: ""
+            disable_classes: ""
+            zend_enable_gc: ""
+            zend_exception_ignore_args: "On"
+            zend_exception_string_param_max_len: "0"
+            expose_php: "On"
+            max_execution_time: "30"
+            max_input_time: "60"
+            memory_limit: "128M"
+            error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+            display_errors: "Off"
+            display_startup_errors: "Off"
+            log_errors: "On"
+            log_errors_max_len: "1024"
+            ignore_repeated_errors: "Off"
+            ignore_repeated_source: "Off"
+            report_memleaks: "On"
+            variables_order: "GPCS"
+            request_order: "GP"
+            register_argc_argv: "Off"
+            auto_globals_jit: "On"
+            post_max_size: "8M"
+            auto_prepend_file: ""
+            auto_append_file: ""
+            default_mimetype: "text/html"
+            default_charset: "UTF-8"
+            doc_root: ""
+            user_dir: ""
+            enable_dl: "Off"
+            file_uploads: "On"
+            upload_max_filesize: "2M"
+            max_file_uploads: "20"
+            allow_url_fopen: "On"
+            allow_url_include: "Off"
+            default_socket_timeout: "60"
+
+      # PHP -> config -> php.fpm
       php_fpm:
-      # PHP -> config -> php-fpm pool -> delete www.conf
         www_conf:
           enabled: true
-          state: "absent"
-      # PHP -> config -> php.fpm pool -> add new.conf
-        new_conf:
-          enabled: true
-          file: "new.conf"
+          file: "www.conf"
           state: "present"
           src: "php_fpm.j2"
-          backup: true
-          vars:
+          backup: false
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -51,8 +103,8 @@
             unix_socket:
               enabled: true
               file: "php{{ php.version }}-fpm.sock"
-              user: "www-test"
-              group: "www-test"
+              user: "www-data"
+              group: "www-data"
 
   tasks:
     - name: include role darexsu.php

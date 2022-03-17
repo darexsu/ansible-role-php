@@ -1,26 +1,26 @@
-[{{ php_fpm[item.key]['vars']['webserver_user'] }}-{{ php['version'] }}]
+[{{ php_fpm[item.key]['data']['webserver_user'] | default(omit) }}-{{ php['version'] }}]
 
-{% if php_fpm[item.key]['vars']['tcp_ip_socket']['enabled'] %}
-listen = {{ php_fpm[item.key]['vars']['tcp_ip_socket']['listen'] }}
+{% if php_fpm[item.key]['data']['tcp_ip_socket']['enabled'] %}
+listen = {{ php_fpm[item.key]['data']['tcp_ip_socket']['listen'] | default(omit) }}
 
-user = {{ php_fpm[item.key]['vars']['webserver_user'] }}
-group = {{ php_fpm[item.key]['vars']['webserver_group'] }}
+user = {{ php_fpm[item.key]['data']['webserver_user'] | default(omit) }}
+group = {{ php_fpm[item.key]['data']['webserver_group'] | default(omit) }}
 {% endif %}
 
-{% if php_fpm[item.key]['vars']['unix_socket']['enabled'] %}
-listen = {{ php_const[ansible_os_family][php.src]['php_fpm_unix_socket_path'] }}{{ php_fpm[item.key]['vars']['unix_socket']['file'] }}
+{% if php_fpm[item.key]['data']['unix_socket']['enabled'] %}
+listen = {{ php_const[ansible_os_family][php.repo]['php_fpm_unix_socket_path'] | default(omit) }}{{ php_fpm[item.key]['data']['unix_socket']['file'] | default(omit) }}
 
-user = {{ php_fpm[item.key]['vars']['unix_socket']['user'] }}
-group = {{ php_fpm[item.key]['vars']['unix_socket']['group'] }}
+user = {{ php_fpm[item.key]['data']['unix_socket']['user'] | default(omit) }}
+group = {{ php_fpm[item.key]['data']['unix_socket']['group'] | default(omit) }}
 
-listen.owner = {{ php_fpm[item.key]['vars']['webserver_user'] }}
-listen.group = {{ php_fpm[item.key]['vars']['webserver_group'] }}
+listen.owner = {{ php_fpm[item.key]['data']['webserver_user'] | default(omit) }}
+listen.group = {{ php_fpm[item.key]['data']['webserver_group'] | default(omit) }}
 listen.mode = 0660
 {% endif %}
 
-pm = {{ php_fpm[item.key]['vars']['pm'] }}
-pm.max_children = {{ php_fpm[item.key]['vars']['pm_max_children'] }}
-pm.start_servers = {{ php_fpm[item.key]['vars']['pm_start_servers'] }}
-pm.min_spare_servers = {{ php_fpm[item.key]['vars']['pm_min_spare_servers'] }}
-pm.max_spare_servers = {{ php_fpm[item.key]['vars']['pm_max_spare_servers'] }}
-pm.max_requests = {{ php_fpm[item.key]['vars']['pm_max_requests'] }}
+pm = {{ php_fpm[item.key]['data']['pm'] | default(omit) }}
+pm.max_children = {{ php_fpm[item.key]['data']['pm_max_children'] | default(omit) }}
+pm.start_servers = {{ php_fpm[item.key]['data']['pm_start_servers'] | default(omit) }}
+pm.min_spare_servers = {{ php_fpm[item.key]['data']['pm_min_spare_servers'] | default(omit) }}
+pm.max_spare_servers = {{ php_fpm[item.key]['data']['pm_max_spare_servers'] | default(omit) }}
+pm.max_requests = {{ php_fpm[item.key]['data']['pm_max_requests'] | default(omit) }}

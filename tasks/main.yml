@@ -1,7 +1,8 @@
 ---
 - name: merge dictionaries
   block:
-    - include_vars:
+    - name: register default vars
+      include_vars:
         file: ../../darexsu.php/defaults/main.yml
         name: php_default_vars
 
@@ -20,15 +21,25 @@
   meta: end_play
   when: not php.enabled
 
-- name: include php install
-  include_tasks: "./tasks/install/php_install__{{ ansible_os_family }}.yml"
+- name: -> 01_PHP_install_{{ ansible_os_family }}.yml
+  include_tasks: "./tasks/01_PHP_install_{{ ansible_os_family }}.yml"
   when: php_install.enabled
 
-- name: include php.ini config
-  include_tasks: "./tasks/config/php_config__php_ini.yml"
-  when:  php_ini.enabled
+- name: service facts
+  ansible.builtin.service_facts:
 
-- name: include "php-fpm config"
-  include_tasks: "./tasks/config/php_config__php_fpm.yml"
-  when: php_fpm[item.key]['enabled']
+- name: -> 02_PHP_config_php_ini.yml
+  include_tasks: "./tasks/02_PHP_config_php_ini.yml"
+  when: php_ini.enabled and ansible_facts.services is search(php_const[ansible_os_family][php.repo]['modules_name'])
+
+- name: -> 03_PHP_config_php_fpm.yml
+  include_tasks: "./tasks/03_PHP_config_php_fpm.yml"
   with_dict: "{{ php_fpm }}"
+  when: php_fpm[item.key]['enabled'] and ansible_facts.services is search(php_const[ansible_os_family][php.repo]['modules_name'])
+
+- name: "ensure php service is {{ php.service.state }}"
+  ansible.builtin.service:
+    name: "{{ php_const[ansible_os_family][php.repo]['modules_name'] }}fpm"
+    state: "{{ php['service']['state'] }}"
+    enabled: "{{ php['service']['enabled'] }}"
+  when: ansible_facts.services is search(php_const[ansible_os_family][php.repo]['modules_name'])

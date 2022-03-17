@@ -2,7 +2,7 @@
 - name: update php.ini config from template
   template:
     src: "{{ php_ini['src'] }}"
-    dest: "{{ php_const[ansible_os_family][php.src]['php_ini_path'] }}{{ php_ini.file }}"
+    dest: "{{ php_const[ansible_os_family][php.repo]['php_ini_path'] }}{{ php_ini.file }}"
     owner: root
     group: root
     mode: 0644

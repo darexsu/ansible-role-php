@@ -1,6 +1,6 @@
 [PHP]
 
-{% for key, value in php_ini.vars.php.items() %}  
+{% for key, value in php_ini.data.php.items() %}  
 {{ key }} = {{ value }}
 {% endfor %}
 

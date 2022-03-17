@@ -5,20 +5,20 @@
   - Role:
       - [platforms](#platforms)
       - [install](#install)
-      - [behaviour](#behaviour)
-  - Playbooks (short version):
-      - [install and configure: PHP](#install-and-configure-php-short-version)
-          - [install: PHP from official repo](#install-php-from-official-repo-short-version)
-          - [install: PHP from third-party repo](#install-php-from-third-party-repo-short-version)
-          - [install: PHP modules](#install-php-modules-short-version)
-          - [configure: php.ini](#configure-phpini-short-version)
-          - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-short-version)
-          - [configure: php-fpm unix socket](#configure-php-fpm-unix-socket-short-version)
-          - [configure: add multiple configs ](#configure-add-multiple-configs-short-version)
+      - [Merge behaviour](#behaviour)
+  - Playbooks (merge version):
+      - [install and configure: PHP](#install-and-configure-php-merge-version)
+          - [install: PHP, repository: distribution](#install-php-repository-distribution-merge-version)
+          - [install: PHP, repository: third_party](#install-php-repository-third_party-merge-version)
+          - [install: PHP modules](#install-php-modules-merge-version)
+          - [configure: php.ini](#configure-phpini-merge-version)
+          - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-merge-version)
+          - [configure: php-fpm unix socket](#configure-php-fpm-unix-socket-merge-version)
+          - [configure: add multiple configs ](#configure-add-multiple-configs-merge-version)
   - Playbooks (full version):
       - [install and configure: PHP](#install-and-configure-php-full-version)
-          - [install: PHP from official repo](#install-php-from-official-repo-full-version)
-          - [install: PHP from third-party repo](#install-php-from-third-party-repo-full-version)
+          - [install: PHP, repository: distribution](#install-php-repository-distribution-full-version)
+          - [install: PHP, repository: third_party](#install-php-repository-third_party-full-version)
           - [install: PHP modules](#install-php-modules-full-version)
           - [configure: php.ini](#configure-phpini-full-version)
           - [configure: php-fpm tcp/ip socket](#configure-php-fpm-tcpip-socket-full-version)
@@ -27,7 +27,7 @@
 
 ### Platforms
 
-|  Testing         |  Official repo     |  Third-party repo |
+|  Testing         | repo: distribution | repo: third_party |
 | :--------------: | :----------------: | :-------------:   |
 | Debian 11        |  PHP 7.4           |    Sury           |
 | Debian 10        |  PHP 7.3           |    Sury           |
@@ -42,7 +42,7 @@
 ansible-galaxy install darexsu.php --force
 ```
 
-### Behaviour
+### Merge behaviour
 
 Replace or Merge dictionaries (with "hash_behaviour=replace" in ansible.cfg):
 ```
@@ -63,7 +63,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
                                       c: "3"
     
 ```
-##### install and configure: PHP (short version)
+##### install and configure: PHP (merge version)
 ```yaml
 ---
 - hosts: all
@@ -85,7 +85,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         file: "php.ini"
         src: "php_ini.j2"
         backup: false
-        vars:
+        data:
           php:
             max_execution_time: "30"
             max_input_time: "60"
@@ -97,7 +97,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           enabled: true
           file: "www.conf"
           state: "present"
-          vars:
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -118,7 +118,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         name: darexsu.php
 
 ```
-##### install: PHP from official repo (short version)
+##### install: PHP, repository: distribution (merge version)
 ```yaml
 ---
 - hosts: all
@@ -130,7 +130,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "distribution"
+        repo: "distribution"
       # PHP -> install
       php_install:
         enabled: true
@@ -141,7 +141,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role: 
         name: darexsu.php
 ```
-##### install: PHP from third-party repo (short version)
+##### install: PHP, repository: third-party (merge version)
 ```yaml
 ---
 - hosts: all
@@ -153,7 +153,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "8.0"
-        src: "third_party"
+        repo: "third_party"
 
       # PHP -> install
       php_install:
@@ -165,7 +165,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role: 
         name: darexsu.php
 ```
-##### install: php modules (short version)
+##### install: php modules (merge version)
 ```yaml
 ---
 - hosts: all
@@ -177,7 +177,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "distribution"
+        repo: "third_party"
       # PHP -> install
       php_install:
         enabled: true
@@ -189,7 +189,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role:
         name: darexsu.php
 ```
-##### configure: php.ini (short version)
+##### configure: php.ini (merge version)
 ```yaml
 ---
 - hosts: all
@@ -201,11 +201,11 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "distribution"
+        repo: "third_party"
       # PHP -> config -> php.ini
       php_ini:
         enabled: true
-        vars:
+        data:
           php:
             engine: "On"
             short_open_tag: "Off"
@@ -220,7 +220,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role:
         name: darexsu.php
 ```
-##### configure: php-fpm tcpip-socket (short version)
+##### configure: php-fpm tcpip-socket (merge version)
 ```yaml
 ---
 - hosts: all
@@ -232,7 +232,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "third_party"
+        repo: "third_party"
       # PHP -> config -> php-fpm pool
       php_fpm:
         www_conf:
@@ -241,7 +241,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           src: "php_fpm.j2"
           backup: true          
-          vars:
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -266,7 +266,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role: 
         name: darexsu.php
 ```
-##### configure: php-fpm unix-socket (short version)
+##### configure: php-fpm unix-socket (merge version)
 ```yaml
 ---
 - hosts: all
@@ -278,7 +278,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "third_party"
+        repo: "third_party"
       # PHP -> config -> php-fpm pool
       php_fpm:
         www_conf:
@@ -287,7 +287,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           src: "php_fpm.j2"
           backup: true         
-          vars:
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -313,7 +313,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         name: darexsu.php
 ```
 
-##### configure: add multiple configs (short version)
+##### configure: add multiple configs (merge version)
 ```yaml
 ---
 - hosts: all
@@ -325,7 +325,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php:
         enabled: true
         version: "7.4"
-        src: "third_party"
+        repo: "third_party"
       # PHP -> config -> php-fpm pool
       php_fpm:
       # PHP -> config -> php.fpm pool -> delete www.conf  
@@ -339,7 +339,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           src: "php_fpm.j2"
           backup: true         
-          vars:
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -363,7 +363,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           src: "php_fpm.j2"
           backup: true         
-          vars:
+          data:
             webserver_user: "www-data"
             webserver_group: "www-data"
             pm: "dynamic"
@@ -393,156 +393,153 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: true
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+      service:
         enabled: true
-        version: "7.4"
-        src: "distribution"
-        service:
-          enabled: true
-          state: "started"
-      # PHP -> install
-      php_install:
+        state: "started"
+    # PHP -> install
+    php_install:
+      enabled: true
+      packages: [common, fpm]
+      dependencies:
+        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+        RedHat: []
+    # PHP -> config -> php.ini
+    php_ini:
+      enabled: true
+      file: "php.ini"
+      src: "php_ini.j2"
+      backup: false
+      data:
+        php:
+          engine: "On"
+          short_open_tag: "Off"
+          precision: "14"
+          output_buffering: "4096"
+          zlib_output_compression: "Off"
+          implicit_flush: "Off"
+          unserialize_callback_func: ""
+          serialize_precision: "-1"
+          disable_functions: ""
+          disable_classes: ""
+          zend_enable_gc: ""
+          zend_exception_ignore_args: "On"
+          zend_exception_string_param_max_len: "0"
+          expose_php: "On"
+          max_execution_time: "30"
+          max_input_time: "60"
+          memory_limit: "128M"
+          error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+          display_errors: "Off"
+          display_startup_errors: "Off"
+          log_errors: "On"
+          log_errors_max_len: "1024"
+          ignore_repeated_errors: "Off"
+          ignore_repeated_source: "Off"
+          report_memleaks: "On"
+          variables_order: "GPCS"
+          request_order: "GP"
+          register_argc_argv: "Off"
+          auto_globals_jit: "On"
+          post_max_size: "8M"
+          auto_prepend_file: ""
+          auto_append_file: ""
+          default_mimetype: "text/html"
+          default_charset: "UTF-8"
+          doc_root: ""
+          user_dir: ""
+          enable_dl: "Off"
+          file_uploads: "On"
+          upload_max_filesize: "2M"
+          max_file_uploads: "20"
+          allow_url_fopen: "On"
+          allow_url_include: "Off"
+          default_socket_timeout: "60"
+    # PHP -> config -> php.fpm
+    php_fpm:
+      www_conf:
         enabled: true
-        packages: [common, fpm]
-        dependencies:
-          Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-          RedHat: []
-      # PHP -> config -> php.ini
-      php_ini:
-        enabled: true
-        file: "php.ini"
-        src: "php_ini.j2"
+        file: "www.conf"
+        state: "present"
+        src: "php_fpm.j2"
         backup: false
-        vars:
-          php:
-            engine: "On"
-            short_open_tag: "Off"
-            precision: "14"
-            output_buffering: "4096"
-            zlib_output_compression: "Off"
-            implicit_flush: "Off"
-            unserialize_callback_func: ""
-            serialize_precision: "-1"
-            disable_functions: ""
-            disable_classes: ""
-            zend_enable_gc: ""
-            zend_exception_ignore_args: "On"
-            zend_exception_string_param_max_len: "0"
-            expose_php: "On"
-            max_execution_time: "30"
-            max_input_time: "60"
-            memory_limit: "128M"
-            error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-            display_errors: "Off"
-            display_startup_errors: "Off"
-            log_errors: "On"
-            log_errors_max_len: "1024"
-            ignore_repeated_errors: "Off"
-            ignore_repeated_source: "Off"
-            report_memleaks: "On"
-            variables_order: "GPCS"
-            request_order: "GP"
-            register_argc_argv: "Off"
-            auto_globals_jit: "On"
-            post_max_size: "8M"
-            auto_prepend_file: ""
-            auto_append_file: ""
-            default_mimetype: "text/html"
-            default_charset: "UTF-8"
-            doc_root: ""
-            user_dir: ""
-            enable_dl: "Off"
-            file_uploads: "On"
-            upload_max_filesize: "2M"
-            max_file_uploads: "20"
-            allow_url_fopen: "On"
-            allow_url_include: "Off"
-            default_socket_timeout: "60"
-      # PHP -> config -> php.fpm
-      php_fpm:
-        www_conf:
-          enabled: true
-          file: "www.conf"
-          state: "present"
-          src: "php_fpm.j2"
-          backup: false
-          vars:
-            webserver_user: "www-data"
-            webserver_group: "www-data"
-            pm: "dynamic"
-            pm_max_children: "10"
-            pm_start_servers: "5"
-            pm_min_spare_servers: "5"
-            pm_max_spare_servers: "5"
-            pm_max_requests: "500"
-            tcp_ip_socket:
-              enabled: false
-              listen: "127.0.0.1:9000"
-            unix_socket:
-              enabled: true
-              file: "php{{ php.version }}-fpm.sock"
-              user: "www-data"
-              group: "www-data"
+        data:
+          webserver_user: "www-data"
+          webserver_group: "www-data"
+          pm: "dynamic"
+          pm_max_children: "10"
+          pm_start_servers: "5"
+          pm_min_spare_servers: "5"
+          pm_max_spare_servers: "5"
+          pm_max_requests: "500"
+          tcp_ip_socket:
+            enabled: false
+            listen: "127.0.0.1:9000"
+          unix_socket:
+            enabled: true
+            file: "php{{ php.version }}-fpm.sock"
+            user: "www-data"
+            group: "www-data"
 
   tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
 ```
-##### install: PHP from official repo (full version)
+##### install: PHP, repository: distribution (full version)
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "distribution"
+      service:
         enabled: true
-        version: "7.4"
-        src: "distribution"
-        service:
-          enabled: true
-          state: "started"
-      # PHP -> install
-      php_install:
-        enabled: true
-        packages: [common, fpm]
-        dependencies:
-          Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-          RedHat: []
+        state: "started"
+    # PHP -> install
+    php_install:
+      enabled: true
+      packages: [common, fpm]
+      dependencies:
+        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+        RedHat: []
 
   tasks:
     - name: include role darexsu.php
       include_role: 
         name: darexsu.php
 ```
-##### install: PHP from third-party repo (full version)
+##### install: PHP, repository: third_party (full version)
 ```yaml
 ---
 - hosts: all
   become: true
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "8.0"
+      repo: "third_party"
+      service:
         enabled: true
-        version: "8.0"
-        src: "third_party"
-        service:
-          enabled: true
-          state: "started"
-      # PHP -> install
-      php_install:
-        enabled: true
-        packages: [common, fpm]
-        dependencies:
-          Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-          RedHat: []
+        state: "started"
+    # PHP -> install
+    php_install:
+      enabled: true
+      packages: [common, fpm]
+      dependencies:
+        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+        RedHat: []
 
   tasks:
     - name: include role darexsu.php
@@ -556,23 +553,22 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: true
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+      service:
         enabled: true
-        version: "7.4"
-        src: "distribution"
-        service:
-          enabled: true
-          state: "started"
-      # PHP -> install
-      php_install:
-        enabled: true
-      # PHP -> install -> install custom modules
-        packages: [common, fpm, gd]
-        dependencies:
-          Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-          RedHat: []
+        state: "started"
+    # PHP -> install
+    php_install:
+      enabled: true
+    # PHP -> install -> install custom modules
+      packages: [common, fpm, gd]
+      dependencies:
+        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+        RedHat: []
 
   tasks:
     - name: include role darexsu.php
@@ -586,66 +582,65 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: true
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+      service:
         enabled: true
-        version: "7.4"
-        src: "distribution"
-        service:
-          enabled: true
-          state: "started"
-      # PHP -> config -> php.ini
-      php_ini:
-        enabled: true
-        file: "php.ini"
-        src: "php_ini.j2"
-        backup: false
-        vars:
-          php:
-            engine: "On"
-            short_open_tag: "Off"
-            precision: "14"
-            output_buffering: "4096"
-            zlib_output_compression: "Off"
-            implicit_flush: "Off"
-            unserialize_callback_func: ""
-            serialize_precision: "-1"
-            disable_functions: ""
-            disable_classes: ""
-            zend_enable_gc: ""
-            zend_exception_ignore_args: "On"
-            zend_exception_string_param_max_len: "0"
-            expose_php: "On"
-            max_execution_time: "30"
-            max_input_time: "60"
-            memory_limit: "128M"
-            error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-            display_errors: "Off"
-            display_startup_errors: "Off"
-            log_errors: "On"
-            log_errors_max_len: "1024"
-            ignore_repeated_errors: "Off"
-            ignore_repeated_source: "Off"
-            report_memleaks: "On"
-            variables_order: "GPCS"
-            request_order: "GP"
-            register_argc_argv: "Off"
-            auto_globals_jit: "On"
-            post_max_size: "8M"
-            auto_prepend_file: ""
-            auto_append_file: ""
-            default_mimetype: "text/html"
-            default_charset: "UTF-8"
-            doc_root: ""
-            user_dir: ""
-            enable_dl: "Off"
-            file_uploads: "On"
-            upload_max_filesize: "2M"
-            max_file_uploads: "20"
-            allow_url_fopen: "On"
-            allow_url_include: "Off"
-            default_socket_timeout: "60"
+        state: "started"
+    # PHP -> config -> php.ini
+    php_ini:
+      enabled: true
+      file: "php.ini"
+      src: "php_ini.j2"
+      backup: false
+      data:
+        php:
+          engine: "On"
+          short_open_tag: "Off"
+          precision: "14"
+          output_buffering: "4096"
+          zlib_output_compression: "Off"
+          implicit_flush: "Off"
+          unserialize_callback_func: ""
+          serialize_precision: "-1"
+          disable_functions: ""
+          disable_classes: ""
+          zend_enable_gc: ""
+          zend_exception_ignore_args: "On"
+          zend_exception_string_param_max_len: "0"
+          expose_php: "On"
+          max_execution_time: "30"
+          max_input_time: "60"
+          memory_limit: "128M"
+          error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+          display_errors: "Off"
+          display_startup_errors: "Off"
+          log_errors: "On"
+          log_errors_max_len: "1024"
+          ignore_repeated_errors: "Off"
+          ignore_repeated_source: "Off"
+          report_memleaks: "On"
+          variables_order: "GPCS"
+          request_order: "GP"
+          register_argc_argv: "Off"
+          auto_globals_jit: "On"
+          post_max_size: "8M"
+          auto_prepend_file: ""
+          auto_append_file: ""
+          default_mimetype: "text/html"
+          default_charset: "UTF-8"
+          doc_root: ""
+          user_dir: ""
+          enable_dl: "Off"
+          file_uploads: "On"
+          upload_max_filesize: "2M"
+          max_file_uploads: "20"
+          allow_url_fopen: "On"
+          allow_url_include: "Off"
+          default_socket_timeout: "60"
 
   tasks:
     - name: include role darexsu.php
@@ -659,39 +654,38 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: yes
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+    # PHP -> config -> php-fpm pool
+    php_fpm:
+      www_conf:
         enabled: true
-        version: "7.4"
-        src: "third_party"
-      # PHP -> config -> php-fpm pool
-      php_fpm:
-        www_conf:
-          enabled: true
-          file: "www.conf"
-          state: "present"
-          src: "php_fpm.j2"
-          backup: true          
-          vars:
-            webserver_user: "www-data"
-            webserver_group: "www-data"
-            pm: "dynamic"
-            pm_max_children: "10"
-            pm_start_servers: "5"
-            pm_min_spare_servers: "5"
-            pm_max_spare_servers: "5"
-            pm_max_requests: "500"
-      # PHP -> config -> php-fpm pool -> enable tcp/ip socket   
-            tcp_ip_socket:
-              enabled: true
-              listen: "127.0.0.1:9000"
-      # PHP -> config -> php-fpm pool -> disable unix socket
-            unix_socket:
-              enabled: false
-              file: "php{{ php.version }}-fpm.sock"
-              user: "www-data"
-              group: "www-data"  
+        file: "www.conf"
+        state: "present"
+        src: "php_fpm.j2"
+        backup: true          
+        data:
+          webserver_user: "www-data"
+          webserver_group: "www-data"
+          pm: "dynamic"
+          pm_max_children: "10"
+          pm_start_servers: "5"
+          pm_min_spare_servers: "5"
+          pm_max_spare_servers: "5"
+          pm_max_requests: "500"
+    # PHP -> config -> php-fpm pool -> enable tcp/ip socket   
+          tcp_ip_socket:
+            enabled: true
+            listen: "127.0.0.1:9000"
+    # PHP -> config -> php-fpm pool -> disable unix socket
+          unix_socket:
+            enabled: false
+            file: "php{{ php.version }}-fpm.sock"
+            user: "www-data"
+            group: "www-data"  
 
   tasks:
     - name: include role darexsu.php
@@ -705,39 +699,38 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: yes
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+    # PHP -> config -> php-fpm pool
+    php_fpm:
+      www_conf:
         enabled: true
-        version: "7.4"
-        src: "third_party"
-      # PHP -> config -> php-fpm pool
-      php_fpm:
-        www_conf:
-          enabled: true
-          file: "www.conf"
-          state: "present"
-          src: "php_fpm.j2"
-          backup: true         
-          vars:
-            webserver_user: "www-data"
-            webserver_group: "www-data"
-            pm: "dynamic"
-            pm_max_children: "10"
-            pm_start_servers: "5"
-            pm_min_spare_servers: "5"
-            pm_max_spare_servers: "5"
-            pm_max_requests: "500"
-      # PHP -> config -> php-fpm pool -> disable tcp/ip socket       
-            tcp_ip_socket:
-              enabled: false
-              listen: "127.0.0.1:9000"
-      # PHP -> config -> php-fpm pool -> enable unix socket
-            unix_socket:
-              enabled: true
-              file: "php{{ php.version }}-fpm.sock"
-              user: "www-data"
-              group: "www-data"  
+        file: "www.conf"
+        state: "present"
+        src: "php_fpm.j2"
+        backup: true         
+        data:
+          webserver_user: "www-data"
+          webserver_group: "www-data"
+          pm: "dynamic"
+          pm_max_children: "10"
+          pm_start_servers: "5"
+          pm_min_spare_servers: "5"
+          pm_max_spare_servers: "5"
+          pm_max_requests: "500"
+    # PHP -> config -> php-fpm pool -> disable tcp/ip socket       
+          tcp_ip_socket:
+            enabled: false
+            listen: "127.0.0.1:9000"
+    # PHP -> config -> php-fpm pool -> enable unix socket
+          unix_socket:
+            enabled: true
+            file: "php{{ php.version }}-fpm.sock"
+            user: "www-data"
+            group: "www-data"  
 
   tasks:
     - name: include role darexsu.php
@@ -752,66 +745,65 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   become: yes
 
   vars:
-    merge:
-      # PHP
-      php:
+    # PHP
+    php:
+      enabled: true
+      version: "7.4"
+      repo: "third_party"
+    # PHP -> config -> php-fpm pool
+    php_fpm:
+    # PHP -> config -> php.fpm pool -> delete www.conf  
+      www_conf:
         enabled: true
-        version: "7.4"
-        src: "third_party"
-      # PHP -> config -> php-fpm pool
-      php_fpm:
-      # PHP -> config -> php.fpm pool -> delete www.conf  
-        www_conf:
-          enabled: true
-          state: "absent"
-      # PHP -> config -> php.fpm pool -> add new.conf
-        first_conf:
-          enabled: true
-          file: "first.conf"
-          state: "present"
-          src: "php_fpm.j2"
-          backup: true         
-          vars:
-            webserver_user: "www-data"
-            webserver_group: "www-data"
-            pm: "dynamic"
-            pm_max_children: "10"
-            pm_start_servers: "5"
-            pm_min_spare_servers: "5"
-            pm_max_spare_servers: "5"
-            pm_max_requests: "500"      
-            tcp_ip_socket:
-              enabled: false
-              listen: "127.0.0.1:9000"
-            unix_socket:
-              enabled: true
-              file: "php{{ php.version }}-first-fpm.sock"
-              user: "www-data"
-              group: "www-data"
-      # PHP -> config -> php.fpm pool -> add second.conf
-        second_conf:
-          enabled: true
-          file: "second.conf"
-          state: "present"
-          src: "php_fpm.j2"
-          backup: true         
-          vars:
-            webserver_user: "www-data"
-            webserver_group: "www-data"
-            pm: "dynamic"
-            pm_max_children: "10"
-            pm_start_servers: "5"
-            pm_min_spare_servers: "5"
-            pm_max_spare_servers: "5"
-            pm_max_requests: "500"      
-            tcp_ip_socket:
-              enabled: false
-              listen: "127.0.0.1:9000"
-            unix_socket:
-              enabled: true
-              file: "php{{ php.version }}-second-fpm.sock"
-              user: "www-data"
-              group: "www-data"  
+        state: "absent"
+    # PHP -> config -> php.fpm pool -> add new.conf
+      first_conf:
+        enabled: true
+        file: "first.conf"
+        state: "present"
+        src: "php_fpm.j2"
+        backup: true         
+        data:
+          webserver_user: "www-data"
+          webserver_group: "www-data"
+          pm: "dynamic"
+          pm_max_children: "10"
+          pm_start_servers: "5"
+          pm_min_spare_servers: "5"
+          pm_max_spare_servers: "5"
+          pm_max_requests: "500"      
+          tcp_ip_socket:
+            enabled: false
+            listen: "127.0.0.1:9000"
+          unix_socket:
+            enabled: true
+            file: "php{{ php.version }}-first-fpm.sock"
+            user: "www-data"
+            group: "www-data"
+    # PHP -> config -> php.fpm pool -> add second.conf
+      second_conf:
+        enabled: true
+        file: "second.conf"
+        state: "present"
+        src: "php_fpm.j2"
+        backup: true         
+        data:
+          webserver_user: "www-data"
+          webserver_group: "www-data"
+          pm: "dynamic"
+          pm_max_children: "10"
+          pm_start_servers: "5"
+          pm_min_spare_servers: "5"
+          pm_max_spare_servers: "5"
+          pm_max_requests: "500"      
+          tcp_ip_socket:
+            enabled: false
+            listen: "127.0.0.1:9000"
+          unix_socket:
+            enabled: true
+            file: "php{{ php.version }}-second-fpm.sock"
+            user: "www-data"
+            group: "www-data"
 
   tasks:
     - name: include role darexsu.php

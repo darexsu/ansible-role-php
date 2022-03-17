@@ -2,7 +2,6 @@
 # PHP
 #   ├── install
 #   |    ├── packages
-#   |    ├── repo
 #   |    └── dependencies
 #   └── config
 #        └── php.ini
@@ -14,7 +13,7 @@
 php:
   enabled: false
   version: "7.4"
-  src: "distribution"
+  repo: "third_party"
   service:
     enabled: true
     state: "started"
@@ -33,7 +32,7 @@ php_ini:
   file: "php.ini"
   src: "php_ini.j2"
   backup: false
-  vars:
+  data:
     php:
       engine: "On"
       short_open_tag: "Off"
@@ -87,7 +86,7 @@ php_fpm:
     state: "present"
     src: "php_fpm.j2"
     backup: false
-    vars:
+    data:
       webserver_user: "www-data"
       webserver_group: "www-data"
       pm: "dynamic"

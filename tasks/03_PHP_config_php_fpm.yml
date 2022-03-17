@@ -4,7 +4,7 @@
 
 - name: remove php-fpm config
   ansible.builtin.file:
-    dest: "{{ php_const[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
+    dest: "{{ php_const[ansible_os_family][php.repo]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
     state: absent
   notify: restart php-fpm
   when: php_fpm[item.key]['state'] == "absent"
@@ -13,26 +13,26 @@
   block:
     - name: ensure web-server group exsist
       ansible.builtin.group:
-        name: "{{ php_fpm[item.key]['vars']['webserver_group'] }}"
+        name: "{{ php_fpm[item.key]['data']['webserver_group'] }}"
 
     - name: ensure web-server user exsist
       ansible.builtin.user:
-        name: "{{ php_fpm[item.key]['vars']['webserver_user'] }}"
-        group: "{{ php_fpm[item.key]['vars']['webserver_group'] }}"
+        name: "{{ php_fpm[item.key]['data']['webserver_user'] }}"
+        group: "{{ php_fpm[item.key]['data']['webserver_group'] }}"
 
     - name: ensure web-server group exsist
       ansible.builtin.group:
-        name: "{{ php_fpm[item.key]['vars']['unix_socket']['group'] }}"
+        name: "{{ php_fpm[item.key]['data']['unix_socket']['group'] }}"
 
     - name: ensure web-server user exsist
       ansible.builtin.user:
-        name: "{{ php_fpm[item.key]['vars']['unix_socket']['user'] }}"
-        group: "{{ php_fpm[item.key]['vars']['unix_socket']['group'] }}"
+        name: "{{ php_fpm[item.key]['data']['unix_socket']['user'] }}"
+        group: "{{ php_fpm[item.key]['data']['unix_socket']['group'] }}"
 
     - name: add php-fpm config
       template:
         src: "{{ php_fpm[item.key]['src'] }}"
-        dest: "{{ php_const[ansible_os_family][php.src]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
+        dest: "{{ php_const[ansible_os_family][php.repo]['php_fpm_path'] }}{{ php_fpm[item.key]['file'] }}"
         owner: root
         group: root
         mode: 0644
