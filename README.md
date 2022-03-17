@@ -5,7 +5,7 @@
   - Role:
       - [platforms](#platforms)
       - [install](#install)
-      - [Merge behaviour](#behaviour)
+      - [Merge behaviour](#merge-behaviour)
   - Playbooks (merge version):
       - [install and configure: PHP](#install-and-configure-php-merge-version)
           - [install: PHP, repository: distribution](#install-php-repository-distribution-merge-version)
