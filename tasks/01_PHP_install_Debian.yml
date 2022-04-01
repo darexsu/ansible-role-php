@@ -4,7 +4,7 @@
     name: "{{ item }}"
     state: present
     update_cache: true
-  with_items: "{{ php_install['dependencies']['Debian'] }}"
+  with_items: "{{ php_const[ansible_os_family]['dependencies'] }}"
 
 - name: add repository debian
   block:
@@ -42,13 +42,13 @@
     update_cache: true
   ignore_errors: true
 
-- name: install php packages
+- name: install php modules
   ansible.builtin.apt:
     name: "php{{ php.version }}-{{ item }}"
     state: present
     update_cache: true
   ignore_errors: true
-  with_items: "{{ php_install.packages }}"
+  with_items: "{{ php_install.modules }}"
 
 - name: "ensure php-fpm is {{ php['service']['state'] }}"
   ansible.builtin.service:

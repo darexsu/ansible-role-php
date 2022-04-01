@@ -4,7 +4,7 @@
     name: "{{ item }}"
     state: present
     update_cache: true
-  with_items: "{{ php_install['dependencies']['RedHat'] }}"
+  with_items: "{{ php_const[ansible_os_family]['dependencies'] }}"
 
 - name: add repository
   block:
@@ -53,7 +53,7 @@
     enablerepo: "{{ php_const[ansible_os_family][php.repo]['enablerepo'] }}"
     update_cache: true
   ignore_errors: true
-  with_items: "{{ php_install.packages}}"
+  with_items: "{{ php_install.modules}}"
 
 - name: "ensure php-fpm is {{ php['service']['state'] }}"
   ansible.builtin.service:

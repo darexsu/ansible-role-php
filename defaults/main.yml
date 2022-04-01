@@ -21,10 +21,7 @@ php:
 # PHP -> install
 php_install:
   enabled: false
-  packages: [common, fpm]
-  dependencies:
-    Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-    RedHat: []
+  modules: [common, fpm]
 
 # PHP -> config -> php.ini
 php_ini:
@@ -107,6 +104,7 @@ php_fpm:
 # PHP -> constants
 php_const:
   RedHat:
+    dependencies: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
     distribution:
       php_fpm_path: "/etc/php-fpm.d/"
       php_ini_path: "/etc/"
@@ -126,6 +124,7 @@ php_const:
       modules_name: "php{{ php.version | replace('.','')}}-php-"
       enablerepo: "remi,remi-php{{ php.version | replace('.','')}}"
   Debian:
+    dependencies: []
     distribution:
       php_ini_path: "/etc/php/{{ php.version }}/fpm/"
       php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"

@@ -78,7 +78,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # PHP -> install
       php_install:
         enabled: true
-        packages: [common, fpm]
+        modules: [common, fpm]
       # PHP -> config -> php.ini
       php_ini:
         enabled: true
@@ -134,7 +134,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # PHP -> install
       php_install:
         enabled: true
-        packages: [common, fpm]
+        modules: [common, fpm]
 
   tasks:
     - name: include role darexsu.php
@@ -158,7 +158,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # PHP -> install
       php_install:
         enabled: true
-        packages: [common, fpm]
+        modules: [common, fpm]
 
   tasks:
     - name: include role darexsu.php
@@ -182,7 +182,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       php_install:
         enabled: true
       # PHP -> install -> install custom modules
-        packages: [common, fpm, gd]
+        modules: [common, fpm, gd]
 
   tasks:
     - name: include role darexsu.php
@@ -404,10 +404,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # PHP -> install
     php_install:
       enabled: true
-      packages: [common, fpm]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-        RedHat: []
+      modules: [common, fpm]
     # PHP -> config -> php.ini
     php_ini:
       enabled: true
@@ -508,10 +505,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # PHP -> install
     php_install:
       enabled: true
-      packages: [common, fpm]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-        RedHat: []
+      modules: [common, fpm]
 
   tasks:
     - name: include role darexsu.php
@@ -536,10 +530,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # PHP -> install
     php_install:
       enabled: true
-      packages: [common, fpm]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-        RedHat: []
+      modules: [common, fpm]
 
   tasks:
     - name: include role darexsu.php
@@ -565,10 +556,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     php_install:
       enabled: true
     # PHP -> install -> install custom modules
-      packages: [common, fpm, gd]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
-        RedHat: []
+      modules: [common, fpm, gd]
 
   tasks:
     - name: include role darexsu.php
