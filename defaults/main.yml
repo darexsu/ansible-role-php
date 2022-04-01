@@ -103,8 +103,24 @@ php_fpm:
 
 # PHP -> constants
 php_const:
-  RedHat:
+  Debian:
     dependencies: [apt-transport-https, ca-certificates, curl, gnupg2, lsb-release]
+    distribution:
+      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
+      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
+      php_fpm_unix_socket_path: "/var/run/php/"
+      modules_name: "php{{ php.version }}-"
+    third_party:
+      sury_repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+      sury_gpg: "https://packages.sury.org/php/apt.gpg"
+      andrej_repo: "ppa:ondrej/php"
+      andrej_gpg: ""
+      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
+      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
+      php_fpm_unix_socket_path: "/var/run/php/"
+      modules_name: "php{{ php.version }}-"
+  RedHat:
+    dependencies: []
     distribution:
       php_fpm_path: "/etc/php-fpm.d/"
       php_ini_path: "/etc/"
@@ -123,19 +139,3 @@ php_const:
       service_name: "php{{ php.version | replace('.','') }}"
       modules_name: "php{{ php.version | replace('.','')}}-php-"
       enablerepo: "remi,remi-php{{ php.version | replace('.','')}}"
-  Debian:
-    dependencies: []
-    distribution:
-      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
-      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
-      php_fpm_unix_socket_path: "/var/run/php/"
-      modules_name: "php{{ php.version }}-"
-    third_party:
-      sury_repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
-      sury_gpg: "https://packages.sury.org/php/apt.gpg"
-      andrej_repo: "ppa:ondrej/php"
-      andrej_gpg: ""
-      php_ini_path: "/etc/php/{{ php.version }}/fpm/"
-      php_fpm_path: "/etc/php/{{ php.version }}/fpm/pool.d/"
-      php_fpm_unix_socket_path: "/var/run/php/"
-      modules_name: "php{{ php.version }}-"
